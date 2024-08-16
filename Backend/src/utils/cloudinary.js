@@ -8,15 +8,14 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_CLOUD_API_SECRET,
 });
 
-const cloudinary_file_upload = async (url, public_id, resource_type) => {
+const cloudinary_file_upload = async (url) => {
   try {
     if (!url) {
       throw new API_Error_handler(404, "Url is missing ");
     }
 
     const file = await cloudinary.uploader.upload(url, {
-      public_id: public_id,
-      resource_type: resource_type,
+      resource_type: "auto",
     });
 
     fs.unlinkSync(url);
@@ -26,3 +25,5 @@ const cloudinary_file_upload = async (url, public_id, resource_type) => {
     throw new API_Error_handler(400, "Error While uploading avatar file ");
   }
 };
+
+export { cloudinary_file_upload };

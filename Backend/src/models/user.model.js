@@ -52,6 +52,9 @@ const user_schema = new Schema(
     refresh_token: {
       type: String,
     },
+    refresh_token: {
+      type: String,
+    },
   },
   { timestamps: true }
 );
@@ -72,7 +75,7 @@ user_schema.methods.is_password_currect = async function (password) {
   return await bcrypt.compare(password, this.password);
 };
 
-user_schema.method.genrate_access_token = function () {
+user_schema.methods.genrate_access_token = function () {
   return jwt.sign(
     {
       _id: this._id,
@@ -85,7 +88,7 @@ user_schema.method.genrate_access_token = function () {
   );
 };
 
-user_schema.method.genrate_refresh_token = function () {
+user_schema.methods.genrate_refresh_token = function () {
   return jwt.sign(
     {
       _id: this._id,

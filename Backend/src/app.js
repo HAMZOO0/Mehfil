@@ -9,4 +9,8 @@ app.use(express.static("public")); // 'Public' folder se files serve ko send krn
 app.use(cookieparser()); // here we send and resive cookies from clien and save in server and perform other opration on cookies
 app.use(cors({ origin: process.env.CORS }));
 
+import user_router from "./routers/user.route.js";
+
+app.use("/api/v1/users", user_router);
+
 export { app };
