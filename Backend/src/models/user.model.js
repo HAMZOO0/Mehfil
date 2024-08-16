@@ -52,9 +52,6 @@ const user_schema = new Schema(
     refresh_token: {
       type: String,
     },
-    refresh_token: {
-      type: String,
-    },
   },
   { timestamps: true }
 );

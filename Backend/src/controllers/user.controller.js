@@ -142,4 +142,116 @@ const logout_user = asyncHandler(async (req, res) => {
   return res.status(200).json(new API_Responce(200, "Logout successfully"));
 });
 
-export { register_user, login_user, logout_user };
+const refresh_Access_token = asyncHandler(async (req, res) => {
+  const token =
+    req.cookies?.refresh_token ||
+    req.header("Authorization")?.replace("Bearer ", "");
+
+  if (!token) {
+    throw new API_Error_handler(400, "invalid requst ");
+  }
+
+  const user = await User.find({ refresh_token: token });
+
+  if (!user) {
+    throw new API_Error_handler(404, "User not found ");
+  }
+
+  const { refresh_token, access_token } =
+    await genrate_access_and_refresh_token(user._id);
+
+  const option = {
+    httpOnly: true,
+    secure: true,
+  };
+
+  return res
+    .status(200)
+    .cookie("access_token", access_token, option)
+    .cookie("refresh_token", refresh_token, option)
+    .json(
+      new API_Responce(
+        200,
+        {
+          "Access Token": access_token,
+          "Refresh Token": refresh_token,
+        },
+        "Token refresh successfully "
+      )
+    );
+});
+
+const change_password = asyncHandler(async (req, res) => {
+  const { oldpassword, password } = req.body;
+
+  if (!password || !oldpassword) {
+    throw new API_Error_handler(400, "Old and New password required");
+  }
+
+  const user = await User.findById(req.user?._id);
+
+  const password_verification = user.is_password_currect(oldpassword);
+  if (!password_verification) {
+    throw new API_Error_handler(400, "Old not currect");
+  }
+
+  user.password = password;
+
+  await user.save({ validateBeforeSave: false });
+
+  return res
+    .status(200)
+    .json(new API_Responce(200, {}, "Password changed successfully "));
+});
+
+const get_current_user = asyncHandler(async (req, res, next) => {
+  return res
+    .status(200)
+    .json(
+      new API_Responce(200, req.user, "Current user feteched successfully")
+    );
+});
+
+const update_account_details = asyncHandler(async (req, res) => {
+  const { user_name, Email, links, bio } = req.body;
+
+  if (!user_name && !Email && !links && !bio) {
+    throw new API_Error_handler(400, "nothing to update");
+  }
+
+  const user = await User.findById(req.user?._id).select(
+    "-password -refresh_token"
+  );
+
+  if (user_name) {
+    user.user_name = user_name;
+  }
+
+  if (Email) {
+    user.Email = Email;
+  }
+
+  if (links) {
+    user.links = links;
+  }
+
+  if (bio) {
+    user.bio = bio;
+  }
+
+  await user.save({ validateBeforeSave: false });
+
+  return res
+    .status(200)
+    .json(new API_Responce(200, user, "Account details updated successfully"));
+});
+
+export {
+  register_user,
+  login_user,
+  logout_user,
+  refresh_Access_token,
+  change_password,
+  get_current_user,
+  update_account_details,
+};
