@@ -11,6 +11,10 @@ const like_Schema = new Schema(
       type: Schema.Types.ObjectId, // one to  whom got follow
       ref: "Post",
     },
+    liked_by: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );

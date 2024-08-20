@@ -1,7 +1,7 @@
 import { API_Error_handler } from "../utils/api_error_handler.js";
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
-import User from "../models/user.model.js";
+import { User } from "../models/user.model.js";
 
 const verify_jwt = asyncHandler(async (req, res, next) => {
   try {

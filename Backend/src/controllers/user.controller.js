@@ -1,13 +1,14 @@
-import User from "../models/user.model.js";
+import { User } from "../models/user.model.js";
 // import {  } from "../middleware/authentication.middleware.js";
 import cookie from "cookie-parser";
 import { API_Error_handler } from "../utils/api_error_handler.js";
 import { API_Responce } from "../utils/api_responce.js";
 import asyncHandler from "express-async-handler";
-import { cloudinary_file_upload } from "../utils/cloudinary.js";
-import mongoose from "mongoose";
+import {
+  cloudinary_file_upload,
+  cloudinary_file_delete,
+} from "../utils/cloudinary.js";
 import { genrate_access_and_refresh_token } from "../utils/genrate_token.js";
-import {} from "../middleware/authentication.middleware.js";
 const register_user = asyncHandler(async (req, res) => {
   //TODO
   /*
@@ -110,7 +111,7 @@ const login_user = asyncHandler(async (req, res) => {
       new API_Responce(
         200,
         {
-          user,
+          logged_in_user,
           "Access Token": access_token,
           "Refresh Token": refresh_token,
         },
@@ -246,6 +247,123 @@ const update_account_details = asyncHandler(async (req, res) => {
     .json(new API_Responce(200, user, "Account details updated successfully"));
 });
 
+const update_avatar = asyncHandler(async (req, res) => {
+  // TODO
+  // 1: upload image - > req.body
+  // 2:remove old url and avatart from cloud
+  // 3: update image url
+  // 3: send res
+
+  const avatar = req.file?.path;
+  if (!avatar) {
+    throw new API_Error_handler(400, "Avatar is missing");
+  }
+
+  // fetch user
+  const user = await User.findById(req.user._id);
+  if (!user) {
+    throw new API_Error_handler(404, "user is missing");
+  }
+
+  // fetching fieldid to delete avatar
+  const avatar_to_delete = user.avatar?.field_id;
+
+  if (!avatar_to_delete) {
+    throw new API_Error_handler(500, "Avatar feild id is missing");
+  }
+
+  // here we delete old one from cloudinary
+  await cloudinary_file_delete(avatar_to_delete);
+
+  // here we upload new to cloudinary
+  const new_avatar = await cloudinary_file_upload(avatar);
+  if (!new_avatar) {
+    throw new API_Error_handler(500, "Error while uploading new avatar");
+  }
+
+  // Update the avatar field in the user document
+  user.avatar = {
+    field_id: new_avatar.public_id,
+    url: new_avatar.url,
+  };
+  await user.save({ validateBeforeSave: false });
+
+  return res.status(200).json(new API_Responce(200, user, "Avatar updated"));
+});
+
+const user_profile = asyncHandler(async (req, res) => {
+  const { user_name } = req.params;
+
+  // if (typeof user_name !== "string") {
+  //   return res.status(400).json({ message: "Invalid user_name format" });
+  // }
+  // const normalizedUserName = user_name.toLowerCase().trim();
+
+  // Query the user by normalized user_name
+  // const user = await User.findOne({ user_name: normalizedUserName });
+
+  // if (!user) {
+  //   return res.status(404).json({ message: "User not found" });
+  // }
+
+  const userData = await User.aggregate([
+    {
+      $match: {
+        user_name: user_name,
+      },
+    },
+
+    {
+      // to gety user  followers
+      $lookup: {
+        from: "follows", // from Follow model
+        localField: "_id", // local feild is id and match with channel which is present in another model
+        foreignField: "follower", // select channel then we receive subscriber
+        as: "Followers",
+      },
+    },
+    {
+      // to gety user following
+      $lookup: {
+        from: "follows", // from Follow model
+        localField: "_id", // local feild is id and match with channel which is present in another model
+        foreignField: "following", // select channel then we receive subscriber
+        as: "following",
+      },
+    },
+    {
+      $addFields: {
+        followersCount: {
+          $size: "$Followers",
+        },
+        followingCount: {
+          $size: "$following",
+        },
+        isFollow: {
+          $cond: {
+            if: { $in: [req.user?._id, "$Followers.follower"] },
+            then: true,
+            else: false,
+          },
+        },
+      },
+    },
+    {
+      $project: {
+        user_name: 1,
+        user_name: 1,
+        bio: 1,
+        links: 1,
+        followersCount: 1,
+        followingCount: 1,
+        isFollow: 1,
+      },
+    },
+  ]);
+
+  return res.status(200).json(new API_Responce(200, userData, "user profile"));
+});
+
 export {
   register_user,
   login_user,
@@ -254,4 +372,6 @@ export {
   change_password,
   get_current_user,
   update_account_details,
+  update_avatar,
+  user_profile,
 };

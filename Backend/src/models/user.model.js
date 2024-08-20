@@ -38,6 +38,7 @@ const user_schema = new Schema(
           required: true,
         },
       },
+      required: true, // Add this line
     },
     bio: {
       type: String,
@@ -95,4 +96,4 @@ user_schema.methods.genrate_refresh_token = function () {
   );
 };
 
-export default mongoose.model("User", user_schema);
+export const User = mongoose.model("User", user_schema);

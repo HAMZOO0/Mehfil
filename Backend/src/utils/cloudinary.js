@@ -26,4 +26,20 @@ const cloudinary_file_upload = async (url) => {
   }
 };
 
-export { cloudinary_file_upload };
+const cloudinary_file_delete = async (fileid) => {
+  try {
+    if (!fileid) {
+      throw new API_Error_handler(404, "Fileid is missing ");
+    }
+    const result = await cloudinary.uploader.destroy(fileid);
+
+    return result;
+  } catch (error) {
+    throw new API_Error_handler(
+      400,
+      error.message || "Error While deleting avatar file "
+    );
+  }
+};
+
+export { cloudinary_file_upload, cloudinary_file_delete };

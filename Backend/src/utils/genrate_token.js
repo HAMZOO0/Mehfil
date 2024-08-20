@@ -1,5 +1,5 @@
 import { API_Error_handler } from "../utils/api_error_handler.js";
-import User from "../models/user.model.js";
+import { User } from "../models/user.model.js";
 
 const genrate_access_and_refresh_token = async (user_id) => {
   try {

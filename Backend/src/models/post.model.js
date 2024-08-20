@@ -20,10 +20,26 @@ const post_schema = new Schema(
     },
 
     post_img: {
-      type: String,
+      _id: false,
+      type: {
+        url: {
+          type: String,
+        },
+        field_id: {
+          type: String,
+        },
+      },
     },
     video: {
-      type: String,
+      _id: false,
+      type: {
+        url: {
+          type: String,
+        },
+        field_id: {
+          type: String,
+        },
+      },
     },
   },
   { timestamps: true }

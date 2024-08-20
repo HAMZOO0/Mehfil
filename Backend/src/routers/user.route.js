@@ -6,6 +6,8 @@ import {
   change_password,
   get_current_user,
   update_account_details,
+  update_avatar,
+  user_profile,
 } from "../controllers/user.controller.js";
 import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
@@ -20,5 +22,9 @@ router.route("/refresh-access-token").get(refresh_Access_token);
 router.route("/change-password").post(verify_jwt, change_password);
 router.route("/get-currect-user").get(verify_jwt, get_current_user);
 router.route("/update-account").post(verify_jwt, update_account_details);
+router.route("/user-profile/:user_name").get(verify_jwt, user_profile);
+router
+  .route("/update-avatar")
+  .post(upload.single("avatar"), verify_jwt, update_avatar);
 
 export default router;
