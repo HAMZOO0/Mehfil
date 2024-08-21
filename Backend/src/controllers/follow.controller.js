@@ -51,7 +51,7 @@ const toggle_follow = asyncHandler(async (req, res) => {
 
 // const get_user_followers = asyncHandler(async(req,res)=>{ })
 
-// here we get of soenoen user profile follwoer
+// here we get the user profile followers
 const get_followers = asyncHandler(async (req, res) => {
   const { followingId } = req.params;
 
@@ -96,4 +96,47 @@ const get_followers = asyncHandler(async (req, res) => {
     );
 });
 
-export { toggle_follow, get_followers };
+// here we get the user follwoing list
+const get_following = asyncHandler(async (req, res) => {
+  const { userID } = req.params;
+  const user_id = new mongoose.Types.ObjectId(userID);
+
+  const following_list = await Follow.aggregate([
+    {
+      $match: {
+        follower: user_id,
+      },
+    },
+    {
+      $group: {
+        _id: null, // This is required for the group stage, but we're not grouping by any specific field
+
+        total_following: { $sum: 1 },
+        following: { $push: "$following" },
+      },
+    },
+    {
+      $project: {
+        total_following: 1,
+        following: 1,
+      },
+    },
+  ]);
+
+  if (following_list.length === 0) {
+    return res
+      .status(200)
+      .json(new API_Responce(200, [], "No Following found"));
+  }
+  return res
+    .status(200)
+    .json(
+      new API_Responce(
+        200,
+        following_list,
+        " Following list fetched successfully"
+      )
+    );
+});
+
+export { toggle_follow, get_followers, get_following };
