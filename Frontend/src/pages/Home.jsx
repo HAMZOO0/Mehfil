@@ -1,29 +1,61 @@
-import { useEffect, useState } from "react";
-import { getCurrentUser } from "../services/api";
+// import React, { useEffect, useState } from "react";
+// import axios from "axios";
 
-const Home = () => {
-  const [user, setUser] = useState(null);
+// const HomePage = () => {
+//   const [posts, setPosts] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchCurrentUser = async () => {
-      try {
-        const { data } = await getCurrentUser();
-        setUser(data.data);
-      } catch (error) {
-        console.error(error);
-        // Handle errors
-      }
-    };
+//   useEffect(() => {
+//     const fetchPosts = async () => {
+//       try {
+//         // Retrieve the token from localStorage (or wherever you store it)
+//         const token = localStorage.getItem("token"); // Adjust the key as needed
 
-    fetchCurrentUser();
-  }, []);
+//         const response = await axios.get(
+//           "http://localhost:5000/api/v1/posts/all-posts",
+//           {
+//             headers: {
+//               Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+//             },
+//           }
+//         );
 
-  return (
-    <div>
-      <h1>Welcome, {user?.user_name}</h1>
-      {/* Add post feed or other components */}
-    </div>
-  );
-};
+//         setPosts(response.data.data.Post);
+//       } catch (err) {
+//         setError(err.message);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
 
-export default Home;
+//     fetchPosts();
+//   }, []);
+
+//   if (loading) return <p>Loading posts...</p>;
+//   if (error) return <p>Error: {error}</p>;
+
+//   return (
+//     <div>
+//       <h1>All Posts</h1>
+//       {posts.length > 0 ? (
+//         <ul>
+//           {posts.map((post) => (
+//             <li key={post._id}>
+//               <h2>{post.title}</h2>
+//               <p>{post.description}</p>
+//               {post.post_img && (
+//                 <img src={post.post_img.url} alt={post.title} />
+//               )}
+//               {post.video && <video src={post.video.url} controls />}
+//             </li>
+//           ))}
+//         </ul>
+//       ) : (
+//         <p>No posts available.</p>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default HomePage;
