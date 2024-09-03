@@ -14,9 +14,8 @@ export default function AllPost() {
 
         // Destructure the necessary data from the response
         const { data } = response; // Assuming response is the API response
-        const posts = data.Post; // Extract the Post array
-
-        console.log(posts);
+        console.log(data);
+        const posts = Array.isArray(data.Post) ? data.Post : []; // Ensure posts is an array
 
         // Update the state with the fetched posts
         setPosts(posts);
@@ -39,11 +38,15 @@ export default function AllPost() {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div>
+    <div className="overflow-y-auto h-screen px-4">
       {posts.length > 0 ? (
-        posts.map((post) => <PostCard key={post._id} post={post} />)
+        posts.map((post) => (
+          <div key={post._id} className="mb-6">
+            <PostCard post={post} />
+          </div>
+        ))
       ) : (
-        <p>No posts available</p>
+        <p className="text-white text-center">No posts available</p>
       )}
     </div>
   );
