@@ -37,6 +37,7 @@ const upload_post = asyncHandler(async (req, res) => {
   }
 
   const postData = {
+    owner: req.user._id,
     title,
     description,
     is_publish,
@@ -67,7 +68,7 @@ const upload_post = asyncHandler(async (req, res) => {
 
 const getAllPosts = asyncHandler(async (req, res) => {
   try {
-    let { page = 1, limit = 10, query, sortBy = -1 } = req.query;
+    let { page = 1, limit = 1, query, sortBy = -1 } = req.query;
 
     limit = parseInt(limit, 10);
     page = parseInt(page, 10);
@@ -109,6 +110,21 @@ const getAllPosts = asyncHandler(async (req, res) => {
     });
     pipline.push({
       $limit: limit,
+    });
+
+    pipline.push({
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "user",
+      },
+    });
+    pipline.push({
+      $project: {
+        "user.password": 0, // Exclude the password field
+        "user.refresh_token": 0, // Exclude the tokens field
+      },
     });
 
     const posts = await Post.aggregate(pipline);
