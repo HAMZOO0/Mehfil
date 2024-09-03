@@ -9,10 +9,10 @@ const api = axios.create({
 
 export const loginUser = async (formdata) => {
   try {
-    console.log("Sending request to:", `${BASE_URL}/users/login`);
-    console.log("Request payload:", formdata);
-
-    const response = await api.post("/users/login", formdata);
+    const response = await api.post("/users/login", {
+      Email: formdata.Email,
+      password: formdata.password,
+    });
     toast.success(response.data?.message || "Logged in successfully");
     return response.data?.user;
   } catch (error) {
