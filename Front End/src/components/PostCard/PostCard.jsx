@@ -86,7 +86,8 @@ export const PostCard = ({ post }) => {
                 clipRule="evenodd"
               />
             </svg>
-            <span>Comment</span>
+{/*           !  comment length here  */}
+            <span>Comment ({comments.length})</span>{" "}
           </button>
         <button className="flex items-center space-x-2 text-[#ae7aff]">
           <svg
