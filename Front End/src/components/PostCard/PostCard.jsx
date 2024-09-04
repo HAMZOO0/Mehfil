@@ -1,5 +1,7 @@
 import React from "react";
 import { formatDistanceToNow } from "date-fns"; // For displaying time ago
+import { useState } from "react";
+
 
 export const PostCard = ({ post }) => {
   // Format the createdAt date to "time ago"
@@ -9,6 +11,15 @@ export const PostCard = ({ post }) => {
 
   // Fallback image if post_img is not provided
   const Postimg = post?.post_img?.url ? post.post_img.url : null;
+
+   // State to manage comment visibility
+  const [showComments, setShowComments] = useState(false);
+  // Toggle comment visibility
+ const toggleComments = () => {
+    setShowComments(!showComments);
+// ! comment api manage here 
+  };
+  
 
   return (
     <div className="w-full max-w-3xl mx-auto bg-gray-700 rounded-lg p-4 text-white shadow-lg">
@@ -59,7 +70,10 @@ export const PostCard = ({ post }) => {
             </svg>
             <span>Like</span>
           </button>
-          <button className="flex items-center space-x-2 text-[#ae7aff]">
+          <button
+            className="flex items-center space-x-2 text-[#ae7aff]"
+            onClick={toggleComments}
+          >
             <svg
               className="w-6 h-6"
               fill="currentColor"
@@ -74,7 +88,6 @@ export const PostCard = ({ post }) => {
             </svg>
             <span>Comment</span>
           </button>
-        </div>
         <button className="flex items-center space-x-2 text-[#ae7aff]">
           <svg
             className="w-6 h-6"
@@ -91,6 +104,24 @@ export const PostCard = ({ post }) => {
           <span>Share</span>
         </button>
       </div>
+     {/* Comments Section */}
+      {showComments && (
+        <div className="mt-4">
+          {comments.map((comment) => (
+            <div key={comment.id} className="flex items-center mb-2">
+              <img
+                src={comment.avatar}
+                alt={comment.user}
+                className="w-8 h-8 rounded-full mr-2"
+              />
+              <div>
+                <span className="font-bold">{comment.user}:</span>{" "}
+                <span className="text-gray-300">{comment.text}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
