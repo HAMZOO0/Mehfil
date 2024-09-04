@@ -91,3 +91,13 @@ function CrearePostBox() {
 }
 
 export default CrearePostBox;
+
+/*
+useRef(null): Starts as null and will be attached to an element later.
+
+ref={fileInputRef}: Tells React to attach the reference to the specific input element.
+
+fileInputRef.current: Points to the input element in the DOM after it's rendered.
+
+fileInputRef.current.click(): Simulates a user click on the input, opening the file picker.
+ */
