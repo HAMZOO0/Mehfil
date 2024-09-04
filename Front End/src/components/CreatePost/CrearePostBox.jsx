@@ -1,17 +1,17 @@
 import { useRef } from "react";
 
 function CrearePostBox() {
-  const fileInputRef = useRef(null);
+   const fileInputRef = useRef(null);
 
   // Function to trigger file input click
   const handleIconClick = () => {
     fileInputRef.current.click(); // This triggers the file input click
-    console.log("Click howa");
+    console.log("fileInputRef.current ", fileInputRef);
   };
 
   // Function to handle file selection
   const handleFileChange = (e) => {
-    console.log("onchange howa");
+    console.log("onchange ");
 
     const file = e.target.files[0];
     if (file) {
@@ -19,6 +19,9 @@ function CrearePostBox() {
       // Handle file upload logic here (e.g., send the file to the server)
     }
   };
+
+  // here we handle apis
+  const handlePostClick = () => {};
 
   return (
     <div className="w-full max-w-3xl mx-auto bg-gray-700 rounded-lg p-4 text-white shadow-lg">
@@ -38,7 +41,7 @@ function CrearePostBox() {
       {/* Upload icon and send button */}
       <div className="flex gap-x-1 sm:gap-x-2">
         <button
-          onClick={handleIconClick} // Trigger file input when icon is clicked
+          onClick={handlePostClick} // Trigger file input when icon is clicked
           className="flex shrink-0 items-center justify-center p-1"
         >
           <svg
@@ -67,7 +70,11 @@ function CrearePostBox() {
           style={{ display: "none" }} // Hide the input
         />
 
-        <button className="flex shrink-0 items-center justify-center bg-[#ae7aff] p-1">
+        {/* upload post  button  */}
+        <button
+          onClick={handleIconClick}
+          className="flex shrink-0 items-center justify-center bg-[#ae7aff] p-1"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
