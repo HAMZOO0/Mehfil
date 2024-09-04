@@ -20,7 +20,14 @@ const register_user = asyncHandler(async (req, res) => {
    * create user in db and upload all data
    * remove password and toekn form responce
    */
-  const { user_name, Full_name, Email, password } = req.body;
+  const {
+    user_name,
+    Full_name,
+    Email,
+    password,
+    bio = "No bio ",
+    links = "No link",
+  } = req.body;
   const avatar = req.file?.path;
   //   const avatar_local_path = req.files?.avatar?.[0]?.path;
 
@@ -44,6 +51,9 @@ const register_user = asyncHandler(async (req, res) => {
     Full_name,
     Email,
     password,
+    bio,
+    links,
+
     avatar: {
       field_id: cloudinary_avatar.public_id,
       url: cloudinary_avatar.url,
@@ -97,6 +107,7 @@ const login_user = asyncHandler(async (req, res) => {
   const logged_in_user = await User.findById(user._id).select(
     "-password -refresh_token"
   );
+  console.log("logged_in_user", logged_in_user);
 
   const option = {
     httpOnly: true,
@@ -112,8 +123,6 @@ const login_user = asyncHandler(async (req, res) => {
         200,
         {
           logged_in_user,
-          "Access Token": access_token,
-          "Refresh Token": refresh_token,
         },
         "User login successfully"
       )
