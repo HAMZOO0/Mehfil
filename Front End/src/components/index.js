@@ -6,6 +6,9 @@ import PostCard from "./PostCard/PostCard.jsx";
 import LoadingSpinner from "./Loader/spinner.jsx";
 import SideProfileView from "./SideProfile/SideProfileBox.jsx";
 import SideProfileFullBox from "./SideProfile/SideProfileFullBox.jsx";
+import Layout from "./Layout.jsx";
+import Header from "./Header/Header.jsx";
+import CreatePost from "./Header/CreatePost.jsx";
 export {
   Input,
   Login,
@@ -15,4 +18,7 @@ export {
   LoadingSpinner,
   SideProfileView,
   SideProfileFullBox,
+  Header,
+  Layout,
+  CreatePost,
 };

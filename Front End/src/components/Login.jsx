@@ -9,16 +9,20 @@ export default function Login() {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { setUser } = useStore();
+  const { setUser, isAuthenticated } = useStore();
 
   const onSubmit = async (data) => {
-    console.log("Form submitted:", data); // Check if this logs
     try {
       const response = await loginUser(data);
       toast.success("Login successful!");
-      setUser(response.data.user);
-      navigate("/home");
+
+      setUser(response);
+      console.log(response);
+
+      navigate("/");
     } catch (error) {
+      console.log("error", error);
+
       toast.error("Failed to login. Please check your credentials.");
     }
   };

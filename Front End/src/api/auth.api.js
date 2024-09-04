@@ -14,7 +14,9 @@ export const loginUser = async (formdata) => {
       password: formdata.password,
     });
     toast.success(response.data?.message || "Logged in successfully");
-    return response.data?.user;
+    // console.log("data", response.data.data.logged_in_user);
+
+    return response.data.data.logged_in_user;
   } catch (error) {
     console.error("Error:", error);
     toast.error(error?.response?.data?.error || "Invalid Credentials");

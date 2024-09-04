@@ -25,6 +25,8 @@ export default function Signup() {
       formData.append("Full_name", data.Full_name);
       formData.append("Email", data.Email);
       formData.append("password", data.password);
+      formData.append("bio", data.bio);
+      formData.append("links", data.links);
 
       // Append the file
       formData.append("avatar", data.avatar[0]); // Assuming `data.avatar` is an array
@@ -32,8 +34,8 @@ export default function Signup() {
       const response = await registerUser(formData);
       toast.success("Registration successful!");
       console.log(response);
-      setUser(response.data.user);
-      // navigate("/home");
+      setUser(response);
+      navigate("/");
     } catch (error) {
       toast.error(error?.response?.formData?.error || "An error occurred");
     } finally {
@@ -162,6 +164,27 @@ export default function Signup() {
             {errors.password && (
               <p className="text-red-600">{errors.password.message}</p>
             )}
+
+            {/* bio  */}
+            <Input
+              id="bio"
+              name="bio"
+              type="bio"
+              label="bio*"
+              placeholder="Enter your Bio"
+              {...register("bio")}
+              className="mb-4 w-full rounded-lg border border-gray-600 bg-black px-3 py-2 text-white placeholder-gray-400"
+            />
+            {/* links  */}
+            <Input
+              id="links"
+              name="links"
+              type="links"
+              label="links*"
+              placeholder="Enter your links"
+              {...register("links")}
+              className="mb-4 w-full rounded-lg border border-gray-600 bg-black px-3 py-2 text-white placeholder-gray-400"
+            />
             {/* <!-- Avatar --> */}
 
             <Input

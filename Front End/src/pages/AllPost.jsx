@@ -38,7 +38,7 @@ export default function AllPost() {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="overflow-y-auto h-screen px-4">
+    <div className="  bg-gray-800 py-14 pr-14">
       {posts.length > 0 ? (
         posts.map((post) => (
           <div key={post._id} className="mb-6">
