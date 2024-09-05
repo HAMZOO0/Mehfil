@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 const Header = () => {
   const navigate = useNavigate();
   const handleclick = () => {
@@ -7,7 +8,10 @@ const Header = () => {
   };
   return (
     <header class="fixed top-0 z-50 mx-auto flex w-full max-w-full items-center justify-between border-b-[1px] border-b-slate-300 bg-[#121212] p-4 text-white lg:px-10">
-      <h1 class="text-xl font-extrabold md:text-3xl">Mehfil </h1>
+      <Link to="/">
+        {" "}
+        <h1 class="text-xl font-extrabold md:text-3xl">Mehfil </h1>
+      </Link>
       <div class="flex w-max flex-shrink-0 items-center justify-end gap-6">
         <span class="relative">
           <svg

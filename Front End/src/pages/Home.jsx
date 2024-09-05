@@ -3,6 +3,7 @@ import {
   Header,
   Layout,
   SideProfileView,
+  CreatePost,
 } from "../components/index.js";
 import AllPost from "./AllPost";
 import { useStore } from "../Store/store.js";
@@ -19,6 +20,7 @@ export default function Home() {
 
   return (
     <Layout header={<Header />} sidebar={<SideProfileView />}>
+      <CreatePost />
       <AllPost />
     </Layout>
   );

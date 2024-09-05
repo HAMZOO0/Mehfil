@@ -8,7 +8,7 @@ import SideProfileView from "./SideProfile/SideProfileBox.jsx";
 import SideProfileFullBox from "./SideProfile/SideProfileFullBox.jsx";
 import Layout from "./Layout.jsx";
 import Header from "./Header/Header.jsx";
-import CreatePost from "./Header/CreatePost.jsx";
+import CreatePost from "./CreatePost/CreatePost.jsx";
 export {
   Input,
   Login,

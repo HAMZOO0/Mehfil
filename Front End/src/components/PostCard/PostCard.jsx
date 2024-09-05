@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { formatDistanceToNow } from "date-fns"; // For displaying time ago
-import { useState } from "react";
-
+import { getAllComments, addComment } from "../../api/comment.js";
+import { useParams } from "react-router-dom";
 
 export const PostCard = ({ post }) => {
+  console.log("postId", post._id);
+
   // Format the createdAt date to "time ago"
   const timeAgo = formatDistanceToNow(new Date(post.createdAt), {
     addSuffix: true,
@@ -12,18 +14,37 @@ export const PostCard = ({ post }) => {
   // Fallback image if post_img is not provided
   const Postimg = post?.post_img?.url ? post.post_img.url : null;
 
-   // State to manage comment visibility
+  // State to manage comment visibility and comment data
   const [showComments, setShowComments] = useState(false);
-  // Toggle comment visibility
- const toggleComments = () => {
-    setShowComments(!showComments);
-// ! comment api manage here 
-  };
-  
+  const [comments, setComments] = useState([]); // Store comments data
+  const [Newcomment, setNewcomment] = useState("");
 
+  const fetchComments = async () => {
+    const response = await getAllComments(post._id);
+    setComments(response.data);
+  };
+  useEffect(() => {
+    // Fetch comments when showing comments section
+    fetchComments();
+  }, []); // Only fetch comments when showComments changes to true
+  const toggleComments = () => {
+    setShowComments(!showComments);
+  };
+
+  const handleNewcomment = async (e) => {
+    setNewcomment(e.target.value);
+    console.log("e.target.value,", e.target.value);
+  };
+
+  const handleNewCommentSubmit = async (e) => {
+    const response = await addComment(Newcomment, post._id);
+    // console.log("respoence", response);
+    console.log("respoence", comments);
+    // when we add post then i am fetching comments again
+    fetchComments();
+  };
   return (
     <div className="w-full max-w-3xl mx-auto bg-gray-700 rounded-lg p-4 text-white shadow-lg">
-      {/* Post Header */}
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
           <img
@@ -41,19 +62,21 @@ export const PostCard = ({ post }) => {
         <div className="text-2xl">...</div>
       </div>
 
-      {/* Post Content */}
-      <div>
-        <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
-        <p className="text-lg text-gray-300 mb-4">{post.description}</p>
-        {Postimg && (
-          <div className="overflow-hidden rounded-lg mb-4">
-            <img
-              src={Postimg}
-              alt="Post"
-              className="w-full h-auto max-h-64 object-cover"
-            />
-          </div>
-        )}
+      <div className="mb-4">
+        {/* Post Content */}
+        <div>
+          <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
+          <p className="text-lg text-gray-300 mb-4">{post.description}</p>
+          {Postimg && (
+            <div className="overflow-hidden rounded-lg mb-4">
+              <img
+                src={Postimg}
+                alt="Post"
+                className="w-full h-auto max-h-64 object-cover"
+              />
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Post Actions */}
@@ -86,41 +109,59 @@ export const PostCard = ({ post }) => {
                 clipRule="evenodd"
               />
             </svg>
-{/*           !  comment length here  */}
-            <span>Comment ({comments.length})</span>{" "}
+            {/* Display number of comments dynamically */}
+            <span>Comment ({comments.length})</span>
           </button>
-        <button className="flex items-center space-x-2 text-[#ae7aff]">
-          <svg
-            className="w-6 h-6"
-            fill="currentColor"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-          >
-            <path
-              fillRule="evenodd"
-              d="M15.75 4.5a3 3 0 11.825 2.066l-8.421 4.679a3.002 3.002 0 010 1.51l8.421 4.679a3 3 0 11-.729 1.31l-8.421-4.678a3 3 0 110-4.132l8.421-4.679a3 3 0 01-.096-.755z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <span>Share</span>
-        </button>
+          <button className="flex items-center space-x-2 text-[#a6b5d4]">
+            <svg
+              className="w-6 h-6"
+              fill="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+            >
+              <path
+                fillRule="evenodd"
+                d="M15.75 4.5a3 3 0 11.825 2.066l-8.421 4.679a3.002 3.002 0 010 1.51l8.421 4.679a3 3 0 11-.729 1.31l-8.421-4.678a3 3 0 110-4.132l8.421-4.679a3 3 0 01-.096-.755z"
+                clipRule="evenodd"
+              />
+            </svg>
+            <span>Share</span>
+          </button>
+        </div>
       </div>
-     {/* Comments Section */}
+      {/* Comments Section */}
       {showComments && (
         <div className="mt-4">
           {comments.map((comment) => (
             <div key={comment.id} className="flex items-center mb-2">
               <img
-                src={comment.avatar}
-                alt={comment.user}
+                src={comment.user.avatar.url}
+                alt={comment.user.user_name}
                 className="w-8 h-8 rounded-full mr-2"
               />
               <div>
-                <span className="font-bold">{comment.user}:</span>{" "}
-                <span className="text-gray-300">{comment.text}</span>
+                <span className="font-bold ">{comment.user.user_name} : </span>{" "}
+                <span className="text-gray-300 pl-1">{comment.content}</span>
               </div>
             </div>
           ))}
+          {/* Comment Input and Send Button */}
+          <div className="mt-4">
+            <textarea
+              className="w-full p-2 mb-2 rounded-lg bg-gray-800 text-white"
+              rows="3"
+              // value={"newComment"}
+              onChange={handleNewcomment}
+              placeholder="Add a comment..."
+            ></textarea>
+            <button
+              onClick={handleNewCommentSubmit}
+              className="w-full py-2 bg-blue-500 hover:bg-blue-600 text-white font-semibold rounded-lg"
+              // onClick={handleCommentSubmit}
+            >
+              Send
+            </button>
+          </div>
         </div>
       )}
     </div>

@@ -16,3 +16,15 @@ export const getAllPosts = async () => {
     throw error;
   }
 };
+
+export const uploadPost = async (data) => {
+  try {
+    const response = await api.post("/posts/upload-post", data);
+    toast.success("Post created successfully");
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+    toast.error(error?.response?.data?.error || "Failed to create post");
+    throw error;
+  }
+};

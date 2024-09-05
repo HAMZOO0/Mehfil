@@ -13,7 +13,7 @@ function Layout({ children, sidebar, header }) {
         <aside className="w-1/4 bg-gray-800 p-4 pr-28">
           {sidebar} {/* Render the sidebar content here */}
         </aside>
-        <main className="w-3/4 p-4 overflow-y-auto">
+        <main className="w-3/4 p-14 overflow-y-auto">
           {children} {/* Render the main content here */}
         </main>
       </div>
