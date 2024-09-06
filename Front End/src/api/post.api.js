@@ -28,3 +28,14 @@ export const uploadPost = async (data) => {
     throw error;
   }
 };
+export const userPosts = async (userid) => {
+  try {
+    const response = await api.get(`/posts/user-posts/${userid}`);
+
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+    toast.error(error?.response?.data?.error || "Failed to fetched post");
+    throw error;
+  }
+};

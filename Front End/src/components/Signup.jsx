@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { Input, Loader } from "./index.js";
 import toast, { Toaster } from "react-hot-toast";
 import { useStore } from "../Store/store.js";
+import { Link } from "react-router-dom";
 export default function Signup() {
   const navigate = useNavigate();
   const { setUser } = useStore();
@@ -44,7 +45,7 @@ export default function Signup() {
   };
 
   return (
-    <div className="h-screen overflow-y-auto bg-[#121212] text-white">
+    <div className="h-full overflow-y-auto bg-[#121212] text-white">
       <div className="flex items-center justify-center h-full">
         <div className="w-full max-w-lg p-8 bg-[#1e1e1e] rounded-lg shadow-lg">
           <div className="mb-6 text-center">
@@ -205,6 +206,12 @@ export default function Signup() {
             >
               Register
             </button>
+            <div>
+              <p className="text-center py-2 text-md">
+                <Link to="/login"> Already have an account?</Link>
+              </p>
+            </div>
+
             <div className="py-5">{Loading && <Loader />}</div>
           </form>
           <Toaster position="top-right" reverseOrder={false} />

@@ -75,3 +75,16 @@ export const refreshAccessToken = async () => {
     throw error;
   }
 };
+
+export const get_user = async (id) => {
+  try {
+    console.log("Fetching data for user ID:", id);
+    // Make sure the endpoint is correct
+    const response = await api.get(`users/user-profile/${id}`);
+
+    return response.data;
+  } catch (error) {
+    toast.error(error?.response?.data?.error || "Failed to fetch user data");
+    throw error;
+  }
+};

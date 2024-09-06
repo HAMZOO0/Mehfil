@@ -1,38 +1,25 @@
-// import { useState, useEffect } from "react";
-// import { getUserProfile } from "../services/api";
-// import { useParams } from "react-router-dom";
+import {
+  LoadingSpinner,
+  Header,
+  Layout,
+  SideProfileView,
+} from "../components/index.js";
+import AllPost from "./UserAllPosts.jsx";
+import { useStore } from "../Store/store.js";
+import { useNavigate } from "react-router-dom";
 
-// const Profile = () => {
-//   const { username } = useParams();
-//   const [userData, setUserData] = useState(null);
+export default function Profile() {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useStore();
+  console.log("isAuthenticated", isAuthenticated);
 
-//   useEffect(() => {
-//     const fetchUserData = async () => {
-//       try {
-//         const { data } = await getUserProfile(username);
-//         setUserData(data.data);
-//       } catch (error) {
-//         console.error(error);
-//         // Handle errors
-//       }
-//     };
+  if (!isAuthenticated) {
+    navigate("/login");
+  }
 
-//     fetchUserData();
-//   }, [username]);
-
-//   if (!userData) {
-//     return <div>Loading...</div>;
-//   }
-
-//   return (
-//     <div>
-//       <h1>{userData.user_name}</h1>
-//       <p>{userData.bio}</p>
-//       <p>Followers: {userData.followersCount}</p>
-//       <p>Following: {userData.followingCount}</p>
-//       {/* Add other profile data like avatar */}
-//     </div>
-//   );
-// };
-
-// export default Profile;
+  return (
+    <Layout header={<Header />} sidebar={<SideProfileView />}>
+      <AllPost />
+    </Layout>
+  );
+}

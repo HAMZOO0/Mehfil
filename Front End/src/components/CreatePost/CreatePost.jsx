@@ -8,7 +8,7 @@ function CrearePostBox() {
   const [postConetent, setPostContent] = useState("");
   const [loading, setLoading] = useState(false);
   const { user } = useStore();
-  const avatart = user.avatar.url;
+  const avatart = user?.avatar?.url || "";
 
   const fileInputRef = useRef(null);
   // Function to trigger file input click
@@ -107,8 +107,8 @@ function CrearePostBox() {
             <path d="M3.478 2.405a.75.75 0 00-.926.94l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.405z"></path>
           </svg>
         </button>
-        <Toaster position="bottom-left" reverseOrder={false} />(
-        {loading && <Toaster position="bottom-left" reverseOrder={false} />})
+        <Toaster position="bottom-left" reverseOrder={false} />
+        {loading && <Toaster position="bottom-left" reverseOrder={false} />}
       </div>
     </div>
   );
