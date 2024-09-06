@@ -9,6 +9,7 @@ import {
   cloudinary_file_delete,
 } from "../utils/cloudinary.js";
 import { genrate_access_and_refresh_token } from "../utils/genrate_token.js";
+import mongoose from "mongoose";
 const register_user = asyncHandler(async (req, res) => {
   //TODO
   /*
@@ -302,7 +303,7 @@ const update_avatar = asyncHandler(async (req, res) => {
 
 const user_profile = asyncHandler(async (req, res) => {
   const { user_name } = req.params;
-
+  const id = new mongoose.Types.ObjectId(user_name);
   // if (typeof user_name !== "string") {
   //   return res.status(400).json({ message: "Invalid user_name format" });
   // }
@@ -318,7 +319,7 @@ const user_profile = asyncHandler(async (req, res) => {
   const userData = await User.aggregate([
     {
       $match: {
-        user_name: user_name,
+        _id: id,
       },
     },
 
@@ -360,9 +361,10 @@ const user_profile = asyncHandler(async (req, res) => {
     {
       $project: {
         user_name: 1,
-        user_name: 1,
         bio: 1,
         links: 1,
+        Email: 1,
+        avatar: 1,
         followersCount: 1,
         followingCount: 1,
         isFollow: 1,

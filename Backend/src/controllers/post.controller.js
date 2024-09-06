@@ -19,10 +19,10 @@ const upload_post = asyncHandler(async (req, res) => {
    * if these are avable then uplaod on cloudniary
    * save it and return res
    */
-  const { title, description, is_publish } = req.body;
+  const { title, description = " ", is_publish } = req.body;
 
-  if (!title || !description) {
-    throw new API_Error_handler(400, "Title and Description is required");
+  if (!title) {
+    throw new API_Error_handler(400, "Title  is required");
   }
 
   const post_img_path = req.files?.post_img?.[0]?.path || "";
@@ -148,18 +148,28 @@ const getAllPosts = asyncHandler(async (req, res) => {
   }
 });
 
+const userPosts = asyncHandler(async (req, res) => {
+  const { userId } = req.params;
+  const userid = new mongoose.Types.ObjectId(userId);
+  if (!userid) {
+    throw new API_Error_handler(400, "user id is required");
+  }
+  const posts = await Post.find({ owner: userId });
+  return res.status(200).json(new API_Responce(200, posts, "user posts"));
+});
+
 const edit_post = asyncHandler(async (req, res) => {
   let { postId } = req.params;
   postId = new mongoose.Types.ObjectId(postId); // here  we convert into obejctid
 
-  const { title, description, is_publish } = req.body;
+  const { title, is_publish } = req.body;
   const post_img = req.file.path;
   console.log(post_img);
 
   if (!postId) {
     throw new API_Error_handler(400, "post id is required");
   }
-  if (!title && !description && !is_publish && !avatart) {
+  if (!title && !is_publish && !avatart) {
     throw new API_Error_handler(400, "nothing to update");
   }
 
@@ -172,7 +182,6 @@ const edit_post = asyncHandler(async (req, res) => {
 
   const postData = {
     title,
-    description,
     is_publish,
   };
 
@@ -242,4 +251,4 @@ const delete_post = asyncHandler(async (req, res) => {
   return res.status(200).json(new API_Responce(200, null, "post deleted"));
 });
 
-export { upload_post, getAllPosts, edit_post, delete_post };
+export { upload_post, getAllPosts, edit_post, delete_post, userPosts };

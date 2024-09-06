@@ -3,6 +3,7 @@ import {
   getAllPosts,
   edit_post,
   delete_post,
+  userPosts,
 } from "../controllers/post.controller.js";
 import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
@@ -25,5 +26,7 @@ router
   .patch(verify_jwt, upload.single("post_img"), edit_post);
 
 router.route("/delete-post/:postId").delete(verify_jwt, delete_post);
+
+router.route("/user-posts/:userId").get(verify_jwt, userPosts);
 
 export default router;

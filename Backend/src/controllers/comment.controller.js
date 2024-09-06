@@ -33,6 +33,17 @@ const getPostComments = asyncHandler(async (req, res) => {
     {
       $limit: limit,
     },
+    {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    {
+      $unwind: "$user", // This will flatten the user array
+    },
   ]);
 
   if (!comment_list) {
