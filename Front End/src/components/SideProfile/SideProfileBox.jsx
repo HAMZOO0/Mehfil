@@ -1,12 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useStore } from "../../Store/store.js";
 import { get_user } from "../../api/auth.api.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const SideProfileView = () => {
   const navigate = useNavigate();
+  // here we get user from user
   const { user } = useStore();
-  const id = user?._id || "";
+  let id = user?._id || "";
+
+  // here i am getting userid from url if avable , if we have userid it is possible we are opend anther user profile
+  const { userId } = useParams();
+  console.log(userId);
+
+  // here we check if userid is avabale in url
+  if (userId) {
+    id = userId;
+  }
+  // and here i test it and it is working ....
 
   const [Email, setEmail] = useState("");
   const [avatar, setAvatar] = useState({});
@@ -31,8 +42,6 @@ const SideProfileView = () => {
         setFollowingCount(userData?.followingCount || 0);
         setLinks(userData?.links || "");
         setUser_name(userData?.user_name || "");
-
-        console.log("current_user", userData);
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       }

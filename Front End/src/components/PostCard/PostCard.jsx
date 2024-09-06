@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { formatDistanceToNow } from "date-fns"; // For displaying time ago
 import { getAllComments, addComment } from "../../api/comment.js";
 import { useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export const PostCard = ({ post }) => {
-  console.log("postId", post._id);
-
   // Format the createdAt date to "time ago"
   const timeAgo = formatDistanceToNow(new Date(post.createdAt), {
     addSuffix: true,
@@ -33,7 +32,6 @@ export const PostCard = ({ post }) => {
 
   const handleNewcomment = async (e) => {
     setNewcomment(e.target.value);
-    console.log("e.target.value,", e.target.value);
   };
 
   const handleNewCommentSubmit = async (e) => {
@@ -43,18 +41,22 @@ export const PostCard = ({ post }) => {
     // when we add post then i am fetching comments again
     fetchComments();
   };
+
   return (
     <div className="w-full max-w-3xl mx-auto bg-gray-700 rounded-lg p-4 text-white shadow-lg">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
-          <img
-            src={post.user[0].avatar.url}
-            alt="User Profile"
-            className="w-14 h-14 rounded-full mr-4"
-          />
+          <Link to={`/profile/${post.owner}`}>
+            <img
+              src={post.user[0].avatar.url}
+              alt="User Profile"
+              className="w-14 h-14 rounded-full mr-4"
+            />
+          </Link>
+
           <div>
             <span className="block text-xl font-bold">
-              {post.user[0].username}
+              {post.user[0].user_name}
             </span>
             <span className="block text-md text-gray-400">{timeAgo}</span>
           </div>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { formatDistanceToNow } from "date-fns"; // For displaying time ago
 import { getAllComments, addComment } from "../../api/comment.js";
 import { get_user } from "../../api/auth.api.js";
+import { useParams } from "react-router-dom";
 
 export default function UserPostCard({ post }) {
   // Format the createdAt date to "time ago"
@@ -11,13 +12,6 @@ export default function UserPostCard({ post }) {
 
   // Fallback image if post_img is not provided
   const Postimg = post?.post_img?.url ? post.post_img.url : null;
-
-  // Ensure post.user is an array and has at least one element
-  const userAvatar =
-    (post?.user && Array.isArray(post.user) && post.user[0]?.avatar?.url) || "";
-  const username =
-    (post?.user && Array.isArray(post.user) && post.user[0]?.username) ||
-    "Unknown User";
 
   // State to manage comment visibility and comment data
   const [showComments, setShowComments] = useState(false);
@@ -56,17 +50,39 @@ export default function UserPostCard({ post }) {
     }
   };
 
+  // here i am handle user data
+  const { userId } = useParams();
+  const [avatar, setAvatar] = useState({});
+  const [user_name, setUser_name] = useState("");
+
+  useEffect(() => {
+    const get_user_data = async () => {
+      try {
+        const current_user = await get_user(userId);
+
+        const userData = current_user.data[0];
+        console.log("followersCount", userData);
+
+        setAvatar(userData?.avatar?.url || "/path/to/default-avatar.png"); // Add fallback avatar
+        setUser_name(userData?.user_name || "");
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
+    };
+    get_user_data();
+  }, []);
+
   return (
     <div className="w-full max-w-3xl mx-auto bg-gray-700 rounded-lg p-4 text-white shadow-lg">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
           <img
-            src={userAvatar}
+            src={avatar}
             alt="User Profile"
             className="w-14 h-14 rounded-full mr-4"
           />
           <div>
-            <span className="block text-xl font-bold">{username}</span>
+            <span className="block text-xl font-bold">{user_name}</span>
             <span className="block text-md text-gray-400">{timeAgo}</span>
           </div>
         </div>
