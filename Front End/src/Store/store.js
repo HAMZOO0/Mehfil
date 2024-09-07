@@ -20,3 +20,8 @@ export const useStore = create(
     }
   )
 );
+
+export const set_user_profile_id = create((set) => ({
+  ID: null,
+  setID: (ID) => set({ ID }),
+}));

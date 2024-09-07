@@ -11,7 +11,8 @@ import SideProfileFullBox from "./SideProfile/SideProfileFullBox.jsx";
 import Layout from "./Layout.jsx";
 import Header from "./Header/Header.jsx";
 import CreatePost from "./CreatePost/CreatePost.jsx";
-
+import UserProfileHeader from "./Header/UserProfileHeader.jsx";
+import EditProfile from "./EditProfile.jsx";
 export {
   Input,
   Login,
@@ -25,4 +26,6 @@ export {
   Layout,
   CreatePost,
   UserPostCard,
+  UserProfileHeader,
+  EditProfile,
 };

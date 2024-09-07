@@ -5,6 +5,7 @@ import AllPost from "./pages/AllPost.jsx";
 import Home from "./pages/Home.jsx";
 import Profile from "./pages/Profile.jsx";
 import CreatePost from "./pages/CreatePostPage.jsx";
+import EditProfilePage from "./pages/EditProfilePage.jsx";
 function App() {
   return (
     <Router>
@@ -16,6 +17,7 @@ function App() {
         <Route path="/allPosts" element={<AllPost />} />
         <Route path="/CreatePost" element={<CreatePost />} />
         <Route path="/profile/:userId" element={<Profile />} />
+        <Route path="/profile/edit-profile" element={<EditProfilePage />} />
       </Routes>
     </Router>
   );

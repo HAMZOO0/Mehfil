@@ -1,16 +1,28 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { logoutUser } from "../../api/auth.api";
+import { useStore } from "../../Store/store.js";
+
 const Header = () => {
   const navigate = useNavigate();
-  const handleclick = () => {
-    navigate("/CreatePost");
+  const { user, logout } = useStore();
+  const handleclick = async () => {
+    await logout();
+    await logoutUser();
   };
   return (
     <header class="fixed top-0 z-50 mx-auto flex w-full max-w-full items-center justify-between border-b-[1px] border-b-slate-300 bg-[#121212] p-4 text-white lg:px-10">
       <Link to="/">
         {" "}
-        <h1 class="text-xl font-extrabold md:text-3xl">Mehfil </h1>
+        <div className="mb-6 text-center">
+          {/* Logo with name "Mehfil" */}
+          <div className="flex flex-col items-center">
+            <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 drop-shadow-lg">
+              Mehfil
+            </div>
+          </div>
+        </div>{" "}
       </Link>
       <div class="flex w-max flex-shrink-0 items-center justify-end gap-6">
         <span class="relative">
@@ -50,22 +62,9 @@ const Header = () => {
         </span>
         <button
           onClick={handleclick}
-          className="hidden w-max items-center justify-center border-[1px] border-white p-3 text-center font-bold text-white md:inline-flex"
+          className="hidden w-max items-center justify-center border-[1px] border-white p-3 text-center font-bold text-white md:inline-flex text-[20px]"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            aria-hidden="true"
-            class="mr-2 h-5 w-5"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM12.75 9a.75.75 0 00-1.5 0v2.25H9a.75.75 0 000 1.5h2.25V15a.75.75 0 001.5 0v-2.25H15a.75.75 0 000-1.5h-2.25V9z"
-              clip-rule="evenodd"
-            ></path>
-          </svg>
-          Create new
+          Logout
         </button>
       </div>
     </header>

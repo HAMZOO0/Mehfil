@@ -84,7 +84,7 @@ export const PostCard = ({ post }) => {
       {/* Post Actions */}
       <div className="flex justify-between items-center">
         <div className="flex space-x-4">
-          <button className="flex items-center space-x-2 text-[#ae7aff]">
+          <button className="flex items-center space-x-2 text-[#a4a1ab]">
             <svg
               className="w-6 h-6"
               fill="currentColor"

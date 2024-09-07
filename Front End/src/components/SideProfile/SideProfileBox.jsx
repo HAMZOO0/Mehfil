@@ -11,7 +11,6 @@ const SideProfileView = () => {
 
   // here i am getting userid from url if avable , if we have userid it is possible we are opend anther user profile
   const { userId } = useParams();
-  console.log(userId);
 
   // here we check if userid is avabale in url
   if (userId) {
@@ -68,7 +67,7 @@ const SideProfileView = () => {
 
       <div className="mb-4 text-sm">
         <h3 className="mb-1 font-bold text-lg">Public link</h3>
-        <button className="block text-[#ae7aff] hover:underline">
+        <button className="block text-[#ae7aff] hover:underline text-start">
           {links}
         </button>
       </div>

@@ -88,3 +88,20 @@ export const get_user = async (id) => {
     throw error;
   }
 };
+
+export const edit_user = async (formdata) => {
+  try {
+    // Make sure the endpoint is correct
+    const response = await api.post(`users/update-account`, formdata);
+    toast.success(
+      response.data?.message || "Your profile has been successfully updated."
+    );
+    return response.data;
+  } catch (error) {
+    toast.error(
+      error?.response?.data?.error ||
+        "Failed to update profile. Please try again later."
+    );
+    throw error;
+  }
+};
