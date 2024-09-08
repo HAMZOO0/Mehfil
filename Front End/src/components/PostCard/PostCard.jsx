@@ -37,7 +37,6 @@ export const PostCard = ({ post }) => {
   const handleNewCommentSubmit = async (e) => {
     const response = await addComment(Newcomment, post._id);
     // console.log("respoence", response);
-    console.log("respoence", comments);
     // when we add post then i am fetching comments again
     fetchComments();
   };

@@ -2,22 +2,21 @@ import React, { useState, useEffect } from "react";
 import { useStore } from "../../Store/store.js";
 import { get_user } from "../../api/auth.api.js";
 import { useNavigate, useParams } from "react-router-dom";
+import { toggleFollow } from "../../api/follow.api.js";
+import { Toaster } from "react-hot-toast";
 
 const SideProfileView = () => {
   const navigate = useNavigate();
-  // here we get user from user
   const { user } = useStore();
   let id = user?._id || "";
 
-  // here i am getting userid from url if avable , if we have userid it is possible we are opend anther user profile
   const { userId } = useParams();
-
-  // here we check if userid is avabale in url
   if (userId) {
     id = userId;
   }
-  // and here i test it and it is working ....
 
+  const [user_profile_check, setuser_profile_check] = useState(false);
+  const [IsFollow, setIsFollow] = useState(false);
   const [Email, setEmail] = useState("");
   const [avatar, setAvatar] = useState({});
   const [bio, setBio] = useState("No Bio");
@@ -28,26 +27,46 @@ const SideProfileView = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (!id) return;
-
       try {
         const current_user = await get_user(id);
         const userData = current_user.data[0];
 
         setEmail(userData?.Email || "");
-        setAvatar(userData?.avatar?.url || "/path/to/default-avatar.png"); // Add fallback avatar
+        setAvatar(userData?.avatar?.url || "/path/to/default-avatar.png");
         setBio(userData?.bio || "No Bio ...");
         setFollowersCount(userData?.followersCount || 0);
         setFollowingCount(userData?.followingCount || 0);
         setLinks(userData?.links || "");
         setUser_name(userData?.user_name || "");
+        setIsFollow(userData?.isFollow);
+
+        if (id === user?._id) {
+          setuser_profile_check(false);
+        } else {
+          setuser_profile_check(true);
+        }
       } catch (error) {
         console.error("Failed to fetch user data:", error);
       }
     };
 
     fetchUserData();
-  }, [id]); // Dependency array changed to `id`
+  }, [id]);
+
+  // handle follow button
+  const handleFollow = async () => {
+    try {
+      const response = await toggleFollow(id);
+
+      // Toggle the follow status and adjust followers count accordingly
+      setIsFollow((prev) => !prev);
+      setFollowersCount((prevCount) =>
+        IsFollow ? prevCount - 1 : prevCount + 1
+      );
+    } catch (error) {
+      console.error("Failed to toggle follow status:", error);
+    }
+  };
 
   return (
     <aside className="hidden md:block lg:col-span-3 bg-gray-900 sticky top-[100px] border p-4 min-w-48 text-white max-h-full">
@@ -84,15 +103,17 @@ const SideProfileView = () => {
       </p>
 
       <button
-        onClick={() => {
-          if (id) {
-            navigate(`/profile/${id}`);
-          }
-        }}
+        onClick={handleFollow}
         className="inline-flex w-max items-center bg-[#ae7aff] px-7 py-3 text-center font-bold text-white shadow-[5px_5px_0px_0px_#4f4e4e] transition-all duration-150 ease-in-out active:translate-x-[5px] active:translate-y-[5px] active:shadow-[0px_0px_0px_0px_#4f4e4e]"
       >
-        View Profile
+        {user_profile_check
+          ? IsFollow
+            ? "Unfollow"
+            : "Follow"
+          : "View Profile"}
       </button>
+
+      <Toaster position="bottom-left" reverseOrder={false} />
     </aside>
   );
 };

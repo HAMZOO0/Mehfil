@@ -6,6 +6,9 @@ import ArticleIcon from "@mui/icons-material/Article"; // Post Icon
 import EditIcon from "@mui/icons-material/Edit"; // Edit Icon
 import BookmarkIcon from "@mui/icons-material/Bookmark"; // Bookmark Icon
 
+import { useStore } from "../../Store/store.js";
+
+// here we import the setid to use this in header to show the header
 import { set_user_profile_id } from "../../Store/store.js";
 
 export default function UserProfileHeader() {
@@ -22,6 +25,10 @@ export default function UserProfileHeader() {
       navigate(`/profile/edit-profile`);
     }
   };
+
+  // now we make a logic for , if the user is open someone else profile the  then we can't show this header we shoud show the posts
+  const { user } = useStore();
+  if (user?._id !== ID) return null;
 
   return (
     <>

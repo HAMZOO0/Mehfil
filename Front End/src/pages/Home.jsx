@@ -15,7 +15,6 @@ export default function Home() {
   const { isAuthenticated } = useStore();
 
   useEffect(() => {
-    console.log("ma lonin hon ");
     if (!isAuthenticated) {
       navigate("/login");
     }
