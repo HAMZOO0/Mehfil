@@ -224,6 +224,8 @@ const get_current_user = asyncHandler(async (req, res, next) => {
 });
 
 const update_account_details = asyncHandler(async (req, res) => {
+  console.log("Request Body:", req.body); // Add this line
+
   const { user_name, Email, links, bio } = req.body;
 
   if (!user_name && !Email && !links && !bio) {
@@ -328,7 +330,7 @@ const user_profile = asyncHandler(async (req, res) => {
       $lookup: {
         from: "follows", // from Follow model
         localField: "_id", // local feild is id and match with channel which is present in another model
-        foreignField: "follower", // select channel then we receive subscriber
+        foreignField: "following", // select channel then we receive subscriber
         as: "Followers",
       },
     },
@@ -337,7 +339,7 @@ const user_profile = asyncHandler(async (req, res) => {
       $lookup: {
         from: "follows", // from Follow model
         localField: "_id", // local feild is id and match with channel which is present in another model
-        foreignField: "following", // select channel then we receive subscriber
+        foreignField: "follower", // select channel then we receive subscriber
         as: "following",
       },
     },

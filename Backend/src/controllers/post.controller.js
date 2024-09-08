@@ -68,7 +68,7 @@ const upload_post = asyncHandler(async (req, res) => {
 
 const getAllPosts = asyncHandler(async (req, res) => {
   try {
-    let { page = 1, limit = 10, query, sortBy = -1 } = req.query;
+    let { page = 1, limit = 100, query, sortBy = -1 } = req.query;
 
     limit = parseInt(limit, 10);
     page = parseInt(page, 10);

@@ -21,7 +21,9 @@ router.route("/logout").get(verify_jwt, logout_user);
 router.route("/refresh-access-token").get(refresh_Access_token);
 router.route("/change-password").post(verify_jwt, change_password);
 router.route("/get-currect-user").get(verify_jwt, get_current_user);
-router.route("/update-account").post(verify_jwt, update_account_details);
+router
+  .route("/update-account")
+  .post(upload.none(), verify_jwt, update_account_details);
 router.route("/user-profile/:user_name").get(verify_jwt, user_profile);
 router
   .route("/update-avatar")
