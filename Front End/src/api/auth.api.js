@@ -105,3 +105,18 @@ export const edit_user = async (formdata) => {
     throw error;
   }
 };
+export const all_users = async () => {
+  try {
+    // Make sure the endpoint is correct
+    const response = await api.get(`users/get-all-users`);
+    console.log("Resonce", response);
+
+    return response.data;
+  } catch (error) {
+    toast.error(
+      error?.response?.data?.error ||
+        "Failed to update profile. Please try again later."
+    );
+    throw error;
+  }
+};

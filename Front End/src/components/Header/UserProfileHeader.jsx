@@ -32,7 +32,7 @@ export default function UserProfileHeader() {
 
   return (
     <>
-      <div className="py-4">
+      <div className="py-10 w-full">
         <BottomNavigation
           showLabels
           value={value}

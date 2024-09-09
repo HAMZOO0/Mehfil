@@ -4,6 +4,7 @@ import {
   Layout,
   SideProfileView,
   CreatePost,
+  FollowBox,
 } from "../components/index.js";
 import AllPost from "./AllPost";
 import { useStore } from "../Store/store.js";
@@ -26,7 +27,11 @@ export default function Home() {
   }
 
   return (
-    <Layout header={<Header />} sidebar={<SideProfileView />}>
+    <Layout
+      header={<Header />}
+      sidebar={<SideProfileView />}
+      followbox={<FollowBox />}
+    >
       <CreatePost />
       <AllPost />
     </Layout>

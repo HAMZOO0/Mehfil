@@ -121,7 +121,7 @@ export default function UserPostCard({ post }) {
             <span>Like</span>
           </button>
           <button
-            className="flex items-center space-x-2 text-[#ae7aff]"
+            className="flex items-center space-x-2 text-[#a88cd5]"
             onClick={toggleComments}
           >
             <svg
@@ -137,7 +137,7 @@ export default function UserPostCard({ post }) {
               />
             </svg>
             {/* Display number of comments dynamically */}
-            <span>Comment ({comments.length})</span>
+            <span> {comments.length}</span>
           </button>
           <button className="flex items-center space-x-2 text-[#a6b5d4]">
             <svg

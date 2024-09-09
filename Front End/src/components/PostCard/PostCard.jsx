@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { formatDistanceToNow } from "date-fns"; // For displaying time ago
 import { getAllComments, addComment } from "../../api/comment.js";
+import { toggle_like, all_likes } from "../../api/like.api.js";
 import { useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 
@@ -25,6 +26,7 @@ export const PostCard = ({ post }) => {
   useEffect(() => {
     // Fetch comments when showing comments section
     fetchComments();
+    total_likes();
   }, []); // Only fetch comments when showComments changes to true
   const toggleComments = () => {
     setShowComments(!showComments);
@@ -39,6 +41,20 @@ export const PostCard = ({ post }) => {
     // console.log("respoence", response);
     // when we add post then i am fetching comments again
     fetchComments();
+  };
+
+  // handle like click
+  const [TotalLikes, setTotalLikes] = useState(0);
+  const [IsLike, setIsLike] = useState(false);
+  const handleLike = async () => {
+    const userlike = await toggle_like(post._id);
+
+    setIsLike((pre) => !pre);
+    setTotalLikes((pre) => (IsLike ? pre - 1 : pre + 1));
+  };
+  const total_likes = async () => {
+    const allLikes = await all_likes(post._id);
+    setTotalLikes(allLikes?.data?.[0]?.totalLikes || 0);
   };
 
   return (
@@ -83,7 +99,13 @@ export const PostCard = ({ post }) => {
       {/* Post Actions */}
       <div className="flex justify-between items-center">
         <div className="flex space-x-4">
-          <button className="flex items-center space-x-2 text-[#a4a1ab]">
+          {/* like button  */}
+          <button
+            onClick={handleLike}
+            className={`flex items-center space-x-2
+              ${IsLike ? `text-purple-500` : ` text-[#e1e1e2]`}
+              `}
+          >
             <svg
               className="w-6 h-6"
               fill="currentColor"
@@ -92,10 +114,10 @@ export const PostCard = ({ post }) => {
             >
               <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
             </svg>
-            <span>Like</span>
+            <span>{TotalLikes}</span>
           </button>
           <button
-            className="flex items-center space-x-2 text-[#ae7aff]"
+            className="flex items-center space-x-2 text-[#a88cd5]"
             onClick={toggleComments}
           >
             <svg
@@ -111,8 +133,10 @@ export const PostCard = ({ post }) => {
               />
             </svg>
             {/* Display number of comments dynamically */}
-            <span>Comment ({comments.length})</span>
+            <span> {comments.length}</span>
           </button>
+
+          {/* share button */}
           <button className="flex items-center space-x-2 text-[#a6b5d4]">
             <svg
               className="w-6 h-6"

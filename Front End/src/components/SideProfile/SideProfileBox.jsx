@@ -56,13 +56,18 @@ const SideProfileView = () => {
   // handle follow button
   const handleFollow = async () => {
     try {
-      const response = await toggleFollow(id);
+      // if user_profile_check is false then i nagivate to profile section and use conditions to check for own profile and other users to set follow / view profile button
+      if (!user_profile_check) {
+        navigate(`/profile/${id}`);
+      } else {
+        const response = await toggleFollow(id);
 
-      // Toggle the follow status and adjust followers count accordingly
-      setIsFollow((prev) => !prev);
-      setFollowersCount((prevCount) =>
-        IsFollow ? prevCount - 1 : prevCount + 1
-      );
+        // Toggle the follow status and adjust followers count accordingly
+        setIsFollow((prev) => !prev);
+        setFollowersCount((prevCount) =>
+          IsFollow ? prevCount - 1 : prevCount + 1
+        );
+      }
     } catch (error) {
       console.error("Failed to toggle follow status:", error);
     }

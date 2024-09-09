@@ -4,10 +4,9 @@ import Signup from "./Signup.jsx";
 import Loader from "./Loader/Loading_half.jsx";
 import PostCard from "./PostCard/PostCard.jsx";
 import UserPostCard from "./PostCard/UserPostCard.jsx";
-
+import FollowBox from "./SideProfile/FollowBox.jsx";
 import LoadingSpinner from "./Loader/spinner.jsx";
 import SideProfileView from "./SideProfile/SideProfileBox.jsx";
-import SideProfileFullBox from "./SideProfile/SideProfileFullBox.jsx";
 import Layout from "./Layout.jsx";
 import Header from "./Header/Header.jsx";
 import CreatePost from "./CreatePost/CreatePost.jsx";
@@ -21,11 +20,11 @@ export {
   PostCard,
   LoadingSpinner,
   SideProfileView,
-  SideProfileFullBox,
   Header,
   Layout,
   CreatePost,
   UserPostCard,
   UserProfileHeader,
   EditProfile,
+  FollowBox,
 };

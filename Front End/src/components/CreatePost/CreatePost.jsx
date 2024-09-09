@@ -45,7 +45,7 @@ function CreatePostBox() {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto bg-gray-900 rounded-lg p-4 mt-4 ml-48 text-white shadow-lg">
+    <div className="w-full max-w-3xl mx-auto bg-gray-900 rounded-lg p-4 mt-4 ml-0 text-white shadow-lg">
       <div className="flex items-center mb-4">
         <img
           className="aspect-square h-10 w-10 shrink-0 rounded-full object-cover"

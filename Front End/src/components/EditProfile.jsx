@@ -35,7 +35,7 @@ export default function EditProfile() {
   };
 
   return (
-    <div className="h-[900px] flex items-center justify-center bg-gray-700 text-white">
+    <div className="h-[900px] flex items-center justify-center bg-gray-700 text-white w-full">
       <div className="w-full max-w-lg p-8 bg-[#1e1e1e] rounded-lg shadow-lg">
         <div className="mb-6 text-center">
           {/* Logo with name "Mehfil" */}
