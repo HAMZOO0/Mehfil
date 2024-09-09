@@ -377,6 +377,20 @@ const user_profile = asyncHandler(async (req, res) => {
   return res.status(200).json(new API_Responce(200, userData, "user profile"));
 });
 
+const getAllUser = asyncHandler(async (req, res) => {
+  const limit = 100;
+  const user = await User.aggregate([
+    {
+      $limit: limit,
+    },
+  ]);
+
+  if (!user) {
+    res.status(200).json(new API_Responce(200, null, "No user find "));
+  }
+  res.status(200).json(new API_Responce(200, user, "No user find "));
+});
+
 export {
   register_user,
   login_user,
@@ -387,4 +401,5 @@ export {
   update_account_details,
   update_avatar,
   user_profile,
+  getAllUser,
 };

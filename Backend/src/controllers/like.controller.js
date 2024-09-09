@@ -38,6 +38,7 @@ const toggle_post_like = asyncHandler(async (req, res) => {
     post: post_id,
     liked_by: user,
   });
+
   return res
     .status(200)
     .json(new API_Responce(200, post_like, "Post Likes ! "));
@@ -105,4 +106,33 @@ const get_liked_posts = asyncHandler(async (req, res) => {
     .json(new API_Responce(200, like_posts, "post likes data fetched"));
 });
 
-export { toggle_post_like, toggle_comment_like, get_liked_posts };
+const get_all_likes = asyncHandler(async (req, res) => {
+  const { postid } = req.params;
+  const id = new mongoose.Types.ObjectId(postid);
+
+  try {
+    const totalLikes = await Like.aggregate([
+      {
+        $match: { post: id },
+      },
+      {
+        $count: "totalLikes", // This will create a field "totalLikes" with the count
+      },
+    ]);
+
+    res
+      .status(200)
+      .json(
+        new API_Responce(200, totalLikes, " Total Likes Fetch successfully")
+      );
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch like count" });
+  }
+});
+
+export {
+  toggle_post_like,
+  toggle_comment_like,
+  get_liked_posts,
+  get_all_likes,
+};

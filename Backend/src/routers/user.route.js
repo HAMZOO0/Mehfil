@@ -8,6 +8,7 @@ import {
   update_account_details,
   update_avatar,
   user_profile,
+  getAllUser,
 } from "../controllers/user.controller.js";
 import { Router } from "express";
 import { upload } from "../middleware/multer.middleware.js";
@@ -28,5 +29,7 @@ router.route("/user-profile/:user_name").get(verify_jwt, user_profile);
 router
   .route("/update-avatar")
   .post(upload.single("avatar"), verify_jwt, update_avatar);
+
+router.route("/get-all-users").get(verify_jwt, getAllUser);
 
 export default router;
