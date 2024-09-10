@@ -3,9 +3,10 @@ import toast from "react-hot-toast";
 import { BASE_URL } from "../../config variables.js";
 
 const api = axios.create({
-  baseURL: "https://mehfil-seven.vercel.app/api/v1/",
+  baseURL: BASE_URL,
   withCredentials: true, // Include credentials with requests
 });
+
 export const toggleFollow = async (id) => {
   try {
     const response = await api.post(`follow/follow-toggle/${id}`);
