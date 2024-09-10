@@ -77,15 +77,8 @@ const register_user = asyncHandler(async (req, res) => {
 });
 
 const login_user = asyncHandler(async (req, res) => {
-  // Todo
-  /*
-   * req.body (pass , email)
-   * verifi  - pass decpyt
-   * tokens genrate
-   * send respeonce with cookies
-   */
-
   const { Email, password } = req.body;
+
   if (!Email || !password) {
     throw new API_Error_handler(404, "Email and Password required");
   }
@@ -93,7 +86,7 @@ const login_user = asyncHandler(async (req, res) => {
   const user = await User.findOne({ Email });
 
   if (!user) {
-    throw new API_Error_handler(404, "invalid Email - User not found  ");
+    throw new API_Error_handler(404, "Invalid Email - User not found");
   }
 
   const passowrd_check = await user.is_password_currect(password);
@@ -102,33 +95,23 @@ const login_user = asyncHandler(async (req, res) => {
     throw new API_Error_handler(401, "Re-check your password");
   }
 
-  const { refresh_token, access_token } =
-    await genrate_access_and_refresh_token(user._id);
+  const { refresh_token, access_token } = await genrate_access_and_refresh_token(user._id);
 
-  const logged_in_user = await User.findById(user._id).select(
-    "-password -refresh_token"
-  );
-  console.log("logged_in_user", logged_in_user);
-
-  const option = {
+  const cookieOptions = {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === 'production', // Set to true only in production
+    sameSite: process.env.NODE_ENV === 'production' ? "None" : "Lax",
   };
 
   return res
     .status(200)
-    .cookie("access_token", access_token, option)
-    .cookie("refresh_token", refresh_token, option)
+    .cookie("access_token", access_token, cookieOptions)
+    .cookie("refresh_token", refresh_token, cookieOptions)
     .json(
-      new API_Responce(
-        200,
-        {
-          logged_in_user,
-        },
-        "User login successfully"
-      )
+      new API_Responce(200, { logged_in_user: user }, "User login successfully")
     );
 });
+
 
 const logout_user = asyncHandler(async (req, res) => {
   // TODO
