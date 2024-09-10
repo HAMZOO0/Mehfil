@@ -6,36 +6,6 @@ const api = axios.create({
   withCredentials: true, // Include credentials with requests
 });
 
-// Assuming API is your Axios instance
-api.interceptors.response.use(
-  (response) => response, // For successful requests, just return the response
-  async (error) => {
-    console.log("error occured", error);
-    const originalRequest = error.config;
-    // Check if the error is due to an expired JWT and we haven't already retried the request
-    if (
-      error?.response?.data?.error === "jwt expired" &&
-      !originalRequest._retry
-    ) {
-      originalRequest._retry = true; // Mark this request as retried
-      try {
-        console.log("this refresh access token called");
-        const { accessToken } = await refreshAccessToken();
-        console.log("new access token", accessToken);
-        // Assume this function refreshes the token and returns the new one
-        // Update the authorization header with the new token
-        api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
-        originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
-        return api(originalRequest); // Retry the original request with the new token
-      } catch (refreshError) {
-        // If the token refresh fails, reject the promise
-        return Promise.reject(refreshError);
-      }
-    }
-    // For all other errors, just return the promise rejection
-    return Promise.reject(error);
-  }
-);
 export const loginUser = async (formdata) => {
   try {
     const response = await api.post("/users/login", {
@@ -44,6 +14,7 @@ export const loginUser = async (formdata) => {
     });
     toast.success(response.data?.message || "Logged in successfully");
     // console.log("data", response.data.data.logged_in_user);
+
     return response.data.data.logged_in_user;
   } catch (error) {
     console.error("Error:", error);
@@ -51,6 +22,7 @@ export const loginUser = async (formdata) => {
     throw error;
   }
 };
+
 export const registerUser = async (formdata) => {
   try {
     const response = await api.post("/users/register", formdata);
@@ -61,6 +33,7 @@ export const registerUser = async (formdata) => {
     throw error;
   }
 };
+
 export const logoutUser = async () => {
   try {
     const response = await api.get("/users/logout");
@@ -71,6 +44,7 @@ export const logoutUser = async () => {
     throw error;
   }
 };
+
 export const changePassword = async (password, oldpassword) => {
   try {
     const response = await api.post(
@@ -79,34 +53,41 @@ export const changePassword = async (password, oldpassword) => {
       oldpassword
     );
     toast.success(response.data?.message || "Password changed successfully");
+
     return response.data;
   } catch (error) {
     toast.error(error?.response?.data?.error || "Failed to change password");
+
     throw error;
   }
 };
+
 // users/refresh-access-token
 export const refreshAccessToken = async () => {
   try {
     const response = await api.get("/users/refresh-access-token");
     toast.success(response.data?.message || "Token refreshed successfully");
+
     return response.data;
   } catch (error) {
     toast.error(error?.response?.data?.error || "Failed to refresh token");
     throw error;
   }
 };
+
 export const get_user = async (id) => {
   try {
     console.log("Fetching data for user ID:", id);
     // Make sure the endpoint is correct
     const response = await api.get(`users/user-profile/${id}`);
+
     return response.data;
   } catch (error) {
     toast.error(error?.response?.data?.error || "Failed to fetch user data");
     throw error;
   }
 };
+
 export const edit_user = async (formdata) => {
   try {
     // Make sure the endpoint is correct
@@ -128,6 +109,7 @@ export const all_users = async () => {
     // Make sure the endpoint is correct
     const response = await api.get(`users/get-all-users`);
     console.log("Resonce", response);
+
     return response.data;
   } catch (error) {
     toast.error(
@@ -137,3 +119,4 @@ export const all_users = async () => {
     throw error;
   }
 };
+
