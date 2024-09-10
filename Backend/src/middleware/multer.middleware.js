@@ -1,22 +1,17 @@
 import multer from "multer";
 import path from "path";
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
 
-// Define __dirname manually
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
+// Multer configuration to store files temporarily in the `/tmp` directory
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const uploadPath = path.join(__dirname, '../public');
-    console.log(`Uploading to: ${uploadPath}`);
-    cb(null, uploadPath);
+    // Use Vercel's writable `/tmp` directory
+    cb(null, "/tmp");
   },
-
   filename: function (req, file, cb) {
-    cb(null, file.originalname);
+    // Create a unique filename using timestamp
+    cb(null, Date.now() + path.extname(file.originalname));
   },
 });
 
+// Create the Multer upload middleware
 export const upload = multer({ storage });
