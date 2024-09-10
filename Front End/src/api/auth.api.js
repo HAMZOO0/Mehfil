@@ -7,7 +7,7 @@ const api = axios.create({
 });
 
 // Assuming API is your Axios instance
-API.interceptors.response.use(
+api.interceptors.response.use(
   (response) => response, // For successful requests, just return the response
   async (error) => {
     console.log("error occured", error);
@@ -24,9 +24,9 @@ API.interceptors.response.use(
         console.log("new access token", accessToken);
         // Assume this function refreshes the token and returns the new one
         // Update the authorization header with the new token
-        API.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+        api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
         originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
-        return API(originalRequest); // Retry the original request with the new token
+        return api(originalRequest); // Retry the original request with the new token
       } catch (refreshError) {
         // If the token refresh fails, reject the promise
         return Promise.reject(refreshError);
