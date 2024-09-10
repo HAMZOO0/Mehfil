@@ -7,7 +7,6 @@ const api = axios.create({
   withCredentials: true, // Include credentials with requests
 });
 
-
 api.interceptors.request.use(config => {
   // Assuming you store your token in localStorage or a global state
   const token = localStorage.getItem('token');
@@ -19,7 +18,6 @@ api.interceptors.request.use(config => {
   return Promise.reject(error);
 });
 
-
 export const loginUser = async (formdata) => {
   try {
     const response = await api.post("/users/login", {
@@ -27,8 +25,10 @@ export const loginUser = async (formdata) => {
       password: formdata.password,
     });
     toast.success(response.data?.message || "Logged in successfully");
-    // console.log("data", response.data.data.logged_in_user);
-
+    
+    // Save token to localStorage
+    localStorage.setItem('token', response.data.token);
+    
     return response.data.data.logged_in_user;
   } catch (error) {
     console.error("Error:", error);
@@ -52,6 +52,8 @@ export const logoutUser = async () => {
   try {
     const response = await api.get("/users/logout");
     toast.success(response?.message);
+    // Remove token from localStorage
+    localStorage.removeItem('token');
     return response.data;
   } catch (error) {
     toast.error(error?.response?.data?.error);
@@ -59,19 +61,14 @@ export const logoutUser = async () => {
   }
 };
 
-export const changePassword = async (password, oldpassword) => {
+export const changePassword = async (formdata) => {
   try {
-    const response = await api.post(
-      "/users/change-password",
-      password,
-      oldpassword
-    );
+    const response = await api.post("/users/change-password", formdata);
     toast.success(response.data?.message || "Password changed successfully");
 
     return response.data;
   } catch (error) {
     toast.error(error?.response?.data?.error || "Failed to change password");
-
     throw error;
   }
 };
@@ -92,7 +89,6 @@ export const refreshAccessToken = async () => {
 export const get_user = async (id) => {
   try {
     console.log("Fetching data for user ID:", id);
-    // Make sure the endpoint is correct
     const response = await api.get(`users/user-profile/${id}`);
 
     return response.data;
@@ -104,8 +100,7 @@ export const get_user = async (id) => {
 
 export const edit_user = async (formdata) => {
   try {
-    // Make sure the endpoint is correct
-    const response = await api.post(`users/update-account`, formdata);
+    const response = await api.post("users/update-account", formdata);
     toast.success(
       response.data?.message || "Your profile has been successfully updated."
     );
@@ -118,17 +113,17 @@ export const edit_user = async (formdata) => {
     throw error;
   }
 };
+
 export const all_users = async () => {
   try {
-    // Make sure the endpoint is correct
-    const response = await api.get(`users/get-all-users`);
-    console.log("Resonce", response);
+    const response = await api.get("users/get-all-users");
+    console.log("Response", response);
 
     return response.data;
   } catch (error) {
     toast.error(
       error?.response?.data?.error ||
-        "Failed to update profile. Please try again later."
+        "Failed to fetch users. Please try again later."
     );
     throw error;
   }
