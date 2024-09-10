@@ -7,31 +7,30 @@ const verify_jwt = asyncHandler(async (req, res, next) => {
   try {
     const token =
       req.cookies?.access_token ||
-      req.header("Authorization")?.replace("Bearer ", ""); // here we access the token
+      req.header("Authorization")?.replace("Bearer ", "");
 
     if (!token) {
-      throw new API_Error_handler(401, "Un-Authorized Requst");
+      console.log("No token found");
+      throw new API_Error_handler(401, "Un-Authorized Request");
     }
 
-    //  token expire will check by server . it check currect time and the time which is stored in token while creating
     const decoded_token = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    console.log("Decoded Token:", decoded_token);
 
-    const user = await User.findById(decoded_token?._id).select(
-      "-password -refresh_token"
-    );
+    const user = await User.findById(decoded_token?._id).select("-password -refresh_token");
     if (!user) {
-      throw new API_Error_handler(401, "invalid access token");
+      console.log("User not found");
+      throw new API_Error_handler(401, "Invalid access token");
     }
 
     req.user = user;
-
     next();
   } catch (error) {
-    throw new API_Error_handler(401, error?.message || "invalid access token");
+    console.error("JWT Verification Error:", error);
+    throw new API_Error_handler(401, error?.message || "Invalid access token");
   }
 });
 
-export { verify_jwt };
 
 /*
 
