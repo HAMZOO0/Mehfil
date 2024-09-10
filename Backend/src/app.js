@@ -8,7 +8,6 @@ app.use(express.urlencoded({ extended: true, limit: "16 kb" }));
 app.use(express.static("public")); // 'Public' folder se files server ko send krnaa
 app.use(cookieparser()); // here we send and resive cookies from clien and save in server and perform other opration on cookies
 app.use(cookieparser()); // here we send and resive cookies from clien and save in server and perform other opration on cookies
-import cors from 'cors';
 
 app.use(
   cors({
