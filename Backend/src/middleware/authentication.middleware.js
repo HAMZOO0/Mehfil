@@ -5,41 +5,47 @@ import { User } from "../models/user.model.js";
 
 const verify_jwt = asyncHandler(async (req, res, next) => {
   try {
+    // Access the token from cookies or Authorization header
     const token =
       req.cookies?.access_token ||
-      req.header("Authorization")?.replace("Bearer ", ""); // here we access the token
+      req.header("Authorization")?.replace("Bearer ", "");
 
+    // If no token is found, throw an error
     if (!token) {
-      throw new API_Error_handler(401, "Un-Authorized Requst");
+      throw new API_Error_handler(401, "Unauthorized Request: No token provided");
     }
 
-    //  token expire will check by server . it check currect time and the time which is stored in token while creating
-    const decoded_token = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    // Verify the token using JWT
+    let decoded_token;
+    try {
+      decoded_token = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        throw new API_Error_handler(401, "Token has expired, please log in again.");
+      } else {
+        throw new API_Error_handler(401, "Invalid access token.");
+      }
+    }
 
+    // Find the user by decoded token ID and exclude sensitive fields
     const user = await User.findById(decoded_token?._id).select(
       "-password -refresh_token"
     );
+    
+    // If the user is not found, throw an error
     if (!user) {
-      throw new API_Error_handler(401, "invalid access token");
+      throw new API_Error_handler(401, "Invalid access token: User not found");
     }
 
+    // Attach the user to the request object for further use
     req.user = user;
 
+    // Call next middleware or route handler
     next();
   } catch (error) {
-    throw new API_Error_handler(401, error?.message || "invalid access token");
+    console.error("JWT Verification Error:", error);  // For debugging
+    throw new API_Error_handler(401, error?.message || "Unauthorized access");
   }
 });
 
 export { verify_jwt };
-
-/*
-
-* req.cookies is an object that contains all cookies sent by the client.
-* req.cookies?.access_token retrieves the value of the access_token cookie if it exists.
-* Web browsers typically use cookies to store and send tokens automatically with each request.
-
-
-* Mobile apps, API clients, and other non-browser clients often use the Authorization header to send tokens.
-* Using req.header("Authorization") allows these clients to send the token in the HTTP header.
- */
