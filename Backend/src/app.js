@@ -8,13 +8,16 @@ app.use(express.urlencoded({ extended: true, limit: "16 kb" }));
 app.use(express.static("public")); // 'Public' folder se files server ko send krnaa
 app.use(cookieparser()); // here we send and resive cookies from clien and save in server and perform other opration on cookies
 app.use(cookieparser()); // here we send and resive cookies from clien and save in server and perform other opration on cookies
+import cors from 'cors';
+
 app.use(
   cors({
-    origin: 'https://mehfil-woad.vercel.app', // Replace with your frontend URL
+    origin: '*', // Allow requests from all origins
     methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true, // Allow credentials (cookies, authorization headers)
+    credentials: false, // Do not allow credentials (cookies, authorization headers)
   })
 );
+
 
 import user_router from "./routers/user.route.js";
 import post_router from "./routers/post.route.js";
