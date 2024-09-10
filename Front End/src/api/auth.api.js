@@ -7,6 +7,19 @@ const api = axios.create({
   withCredentials: true, // Include credentials with requests
 });
 
+
+api.interceptors.request.use(config => {
+  // Assuming you store your token in localStorage or a global state
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+}, error => {
+  return Promise.reject(error);
+});
+
+
 export const loginUser = async (formdata) => {
   try {
     const response = await api.post("/users/login", {
