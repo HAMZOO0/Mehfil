@@ -110,7 +110,9 @@ const login_user = asyncHandler(async (req, res) => {
   );
   console.log("logged_in_user", logged_in_user);
 
-  const option = {
+  const options = {
+    path: "/",
+    sameSite: "None",
     httpOnly: true,
     secure: true,
   };
@@ -171,7 +173,9 @@ const refresh_Access_token = asyncHandler(async (req, res) => {
   const { refresh_token, access_token } =
     await genrate_access_and_refresh_token(user._id);
 
-  const option = {
+  const options = {
+    path: "/",
+    sameSite: "None",
     httpOnly: true,
     secure: true,
   };
