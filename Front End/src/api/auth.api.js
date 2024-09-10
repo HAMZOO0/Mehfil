@@ -1,25 +1,28 @@
 import axios from "axios";
 import toast from "react-hot-toast";
-import { BASE_URL } from "../../config/variables.js"; // Ensure the path and variable name are correct
+
+// You can remove the import if `variables.js` is not used in this file
+// import { BASE_URL } from "../../config/variables.js";
 
 // Create Axios instance with base URL
 const api = axios.create({
-  baseURL: "https://mehfil-seven.vercel.app/api/v1/",
+  baseURL: "https://mehfil-bt88.vercel.app/api/v1/", // Make sure this URL is correct
   withCredentials: true, // Include credentials with requests
 });
 
 // Attach token to requests using an Axios interceptor
-
-// Attach token to requests using an Axios interceptor
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token'); // Adjust based on where you store the token
-  if (token) {
-    config.headers['Authorization'] = `Bearer ${token}`;
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token'); // Make sure the token is stored under 'token'
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-  return config;
-}, (error) => {
-  return Promise.reject(error);
-});
+);
 
 // Login user
 export const loginUser = async (formdata) => {
@@ -89,7 +92,7 @@ export const refreshAccessToken = async () => {
 export const get_user = async (id) => {
   try {
     console.log("Fetching data for user ID:", id);
-    const response = await api.get(`users/user-profile/${id}`);
+    const response = await api.get(`/users/user-profile/${id}`);
     return response.data;
   } catch (error) {
     toast.error(error?.response?.data?.error || "Failed to fetch user data");
@@ -100,7 +103,7 @@ export const get_user = async (id) => {
 // Edit user profile
 export const edit_user = async (formdata) => {
   try {
-    const response = await api.post("users/update-account", formdata);
+    const response = await api.post("/users/update-account", formdata);
     toast.success(response.data?.message || "Profile updated successfully");
     return response.data;
   } catch (error) {
@@ -112,7 +115,7 @@ export const edit_user = async (formdata) => {
 // Get all users
 export const all_users = async () => {
   try {
-    const response = await api.get("users/get-all-users");
+    const response = await api.get("/users/get-all-users");
     console.log("Response", response);
     return response.data;
   } catch (error) {
