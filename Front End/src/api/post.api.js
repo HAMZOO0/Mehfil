@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import { BASE_URL } from "../../config variables.js";
 
 const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: "https://mehfil-seven.vercel.app/api/v1/",
   withCredentials: true, // Include credentials with requests
 });
 
