@@ -9,6 +9,8 @@ const api = axios.create({
 });
 
 // Attach token to requests using an Axios interceptor
+
+// Attach token to requests using an Axios interceptor
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token'); // Adjust based on where you store the token
   if (token) {
