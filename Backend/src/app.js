@@ -10,7 +10,7 @@ app.use(cookieparser()); // here we send and resive cookies from clien and save 
 app.use(cookieparser()); // here we send and resive cookies from clien and save in server and perform other opration on cookies
 app.use(
   cors({
-    origin: 'https://mehfil-social-media.vercel.app, // Replace with your frontend URL
+    origin: 'https://mehfil-social-media.vercel.app', // Replace with your frontend URL
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // Allow credentials (cookies, authorization headers)
   })
