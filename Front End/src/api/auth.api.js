@@ -1,23 +1,41 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 import { BASE_URL } from "../../config variables.js";
-
 const api = axios.create({
   baseURL: "https://mehfil-seven.vercel.app/api/v1/",
   withCredentials: true, // Include credentials with requests
 });
 
-api.interceptors.request.use(config => {
-  // Assuming you store your token in localStorage or a global state
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+// Assuming API is your Axios instance
+API.interceptors.response.use(
+  (response) => response, // For successful requests, just return the response
+  async (error) => {
+    console.log("error occured", error);
+    const originalRequest = error.config;
+    // Check if the error is due to an expired JWT and we haven't already retried the request
+    if (
+      error?.response?.data?.error === "jwt expired" &&
+      !originalRequest._retry
+    ) {
+      originalRequest._retry = true; // Mark this request as retried
+      try {
+        console.log("this refresh access token called");
+        const { accessToken } = await refreshAccessToken();
+        console.log("new access token", accessToken);
+        // Assume this function refreshes the token and returns the new one
+        // Update the authorization header with the new token
+        API.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+        originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
+        return API(originalRequest); // Retry the original request with the new token
+      } catch (refreshError) {
+        // If the token refresh fails, reject the promise
+        return Promise.reject(refreshError);
+      }
+    }
+    // For all other errors, just return the promise rejection
+    return Promise.reject(error);
   }
-  return config;
-}, error => {
-  return Promise.reject(error);
-});
-
+);
 export const loginUser = async (formdata) => {
   try {
     const response = await api.post("/users/login", {
@@ -25,10 +43,7 @@ export const loginUser = async (formdata) => {
       password: formdata.password,
     });
     toast.success(response.data?.message || "Logged in successfully");
-    
-    // Save token to localStorage
-    localStorage.setItem('token', response.data.token);
-    
+    // console.log("data", response.data.data.logged_in_user);
     return response.data.data.logged_in_user;
   } catch (error) {
     console.error("Error:", error);
@@ -36,7 +51,6 @@ export const loginUser = async (formdata) => {
     throw error;
   }
 };
-
 export const registerUser = async (formdata) => {
   try {
     const response = await api.post("/users/register", formdata);
@@ -47,60 +61,56 @@ export const registerUser = async (formdata) => {
     throw error;
   }
 };
-
 export const logoutUser = async () => {
   try {
     const response = await api.get("/users/logout");
     toast.success(response?.message);
-    // Remove token from localStorage
-    localStorage.removeItem('token');
     return response.data;
   } catch (error) {
     toast.error(error?.response?.data?.error);
     throw error;
   }
 };
-
-export const changePassword = async (formdata) => {
+export const changePassword = async (password, oldpassword) => {
   try {
-    const response = await api.post("/users/change-password", formdata);
+    const response = await api.post(
+      "/users/change-password",
+      password,
+      oldpassword
+    );
     toast.success(response.data?.message || "Password changed successfully");
-
     return response.data;
   } catch (error) {
     toast.error(error?.response?.data?.error || "Failed to change password");
     throw error;
   }
 };
-
 // users/refresh-access-token
 export const refreshAccessToken = async () => {
   try {
     const response = await api.get("/users/refresh-access-token");
     toast.success(response.data?.message || "Token refreshed successfully");
-
     return response.data;
   } catch (error) {
     toast.error(error?.response?.data?.error || "Failed to refresh token");
     throw error;
   }
 };
-
 export const get_user = async (id) => {
   try {
     console.log("Fetching data for user ID:", id);
+    // Make sure the endpoint is correct
     const response = await api.get(`users/user-profile/${id}`);
-
     return response.data;
   } catch (error) {
     toast.error(error?.response?.data?.error || "Failed to fetch user data");
     throw error;
   }
 };
-
 export const edit_user = async (formdata) => {
   try {
-    const response = await api.post("users/update-account", formdata);
+    // Make sure the endpoint is correct
+    const response = await api.post(`users/update-account`, formdata);
     toast.success(
       response.data?.message || "Your profile has been successfully updated."
     );
@@ -113,17 +123,16 @@ export const edit_user = async (formdata) => {
     throw error;
   }
 };
-
 export const all_users = async () => {
   try {
-    const response = await api.get("users/get-all-users");
-    console.log("Response", response);
-
+    // Make sure the endpoint is correct
+    const response = await api.get(`users/get-all-users`);
+    console.log("Resonce", response);
     return response.data;
   } catch (error) {
     toast.error(
       error?.response?.data?.error ||
-        "Failed to fetch users. Please try again later."
+        "Failed to update profile. Please try again later."
     );
     throw error;
   }
