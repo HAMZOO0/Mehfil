@@ -1,3 +1,5 @@
+// middleware/verify_jwt.js
+
 import { API_Error_handler } from "../utils/api_error_handler.js";
 import asyncHandler from "express-async-handler";
 import jwt from "jsonwebtoken";
@@ -5,6 +7,7 @@ import { User } from "../models/user.model.js";
 
 const verify_jwt = asyncHandler(async (req, res, next) => {
   try {
+    // Extract token from cookies or Authorization header
     const token =
       req.cookies?.access_token ||
       req.header("Authorization")?.replace("Bearer ", "");
@@ -14,15 +17,18 @@ const verify_jwt = asyncHandler(async (req, res, next) => {
       throw new API_Error_handler(401, "Un-Authorized Request");
     }
 
+    // Verify the token
     const decoded_token = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     console.log("Decoded Token:", decoded_token);
 
+    // Find the user based on the decoded token ID
     const user = await User.findById(decoded_token?._id).select("-password -refresh_token");
     if (!user) {
       console.log("User not found");
       throw new API_Error_handler(401, "Invalid access token");
     }
 
+    // Attach user to request object
     req.user = user;
     next();
   } catch (error) {
@@ -31,14 +37,4 @@ const verify_jwt = asyncHandler(async (req, res, next) => {
   }
 });
 
-
-/*
-
-* req.cookies is an object that contains all cookies sent by the client.
-* req.cookies?.access_token retrieves the value of the access_token cookie if it exists.
-* Web browsers typically use cookies to store and send tokens automatically with each request.
-
-
-* Mobile apps, API clients, and other non-browser clients often use the Authorization header to send tokens.
-* Using req.header("Authorization") allows these clients to send the token in the HTTP header.
- */
+export { verify_jwt };
