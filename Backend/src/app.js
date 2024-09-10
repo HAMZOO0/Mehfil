@@ -1,16 +1,20 @@
-import express from "express";
-import cookieparser from "cookie-parser";
-import cors from "cors";
-import path from "path"; // Import path module
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import express from 'express';
+import cookieparser from 'cookie-parser';
+import cors from 'cors';
 
 const app = express();
+
+// Get the current directory name
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.use(express.json({ limit: "16 kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16 kb" }));
 app.use(express.static(path.join(__dirname, 'public'))); // Serve static files from 'public' directory
- // 'Public' folder se files server ko send krnaa
-app.use(cookieparser()); // here we send and resive cookies from clien and save in server and perform other opration on cookies
-app.use(cookieparser()); // here we send and resive cookies from clien and save in server and perform other opration on cookies
+app.use(cookieparser()); // Parse cookies
+
 app.use(
   cors({
     origin: 'https://mehfil-social-media.vercel.app', // Replace with your frontend URL
@@ -34,5 +38,11 @@ app.use("/api/v1/follow", follow_router);
 app.use("/api/v1/comment", comment_router);
 app.use("/api/v1/bookmark", bookmark_router);
 app.use("/api/v1/healthcheck", healthcheck_router);
+
+// Error handling middleware (Optional but recommended)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Something went wrong!' });
+});
 
 export { app };
