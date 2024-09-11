@@ -8,12 +8,15 @@ import { Toaster } from "react-hot-toast";
 const SideProfileView = () => {
   const navigate = useNavigate();
   const { user } = useStore();
-  let id = user?._id || "";
+  let id = user?.data?._id || "";
 
   const { userId } = useParams();
   if (userId) {
     id = userId;
   }
+  console.log("userId -->", userId);
+  console.log("id -->", id);
+  console.log("id -->", id);
 
   const [user_profile_check, setuser_profile_check] = useState(false);
   const [IsFollow, setIsFollow] = useState(false);
@@ -40,7 +43,7 @@ const SideProfileView = () => {
         setUser_name(userData?.user_name || "");
         setIsFollow(userData?.isFollow);
 
-        if (id === user?._id) {
+        if (id === user?.data?._id || userId === undefined) {
           setuser_profile_check(false);
         } else {
           setuser_profile_check(true);
