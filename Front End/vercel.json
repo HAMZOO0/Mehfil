@@ -2,11 +2,7 @@
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
   ]
- "routes": [
-    {
-      "src": "/Capture.PNG",
-      "dest": "/public/Capture.PNG"
-    }
- ]
+ 
+ 
   
 }
