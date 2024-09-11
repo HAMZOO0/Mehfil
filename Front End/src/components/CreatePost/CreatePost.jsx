@@ -3,7 +3,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { uploadPost } from "../../api/post.api";
 import { useStore } from "../../Store/store.js";
 import { Loader } from "../index.js";
-
+import { useNavigate } from "react-router-dom";
 function CreatePostBox() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [postContent, setPostContent] = useState("");
@@ -12,6 +12,7 @@ function CreatePostBox() {
   const avatar = user?.avatar?.url || "";
 
   const fileInputRef = useRef(null);
+  // const navigate = useNavigate();
 
   const handleIconClick = () => {
     fileInputRef.current?.click();
@@ -37,9 +38,10 @@ function CreatePostBox() {
     } catch (error) {
       toast.error("Failed to create post");
     } finally {
-      setLoading(false);
       setSelectedFile(null);
       setPostContent("");
+      window.location.reload();
+      setLoading(false);
     }
   };
 
