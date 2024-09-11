@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { all_users } from "../../api/auth.api.js";
 import { useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns"; // For displaying time ago
-
+import { Link } from "react-router-dom";
 async function getUserFunction(setUsers) {
   try {
     const response = await all_users();
@@ -43,36 +43,36 @@ function FollowBox() {
                 key={index}
                 className="user-row flex flex-col items-center justify-between cursor-pointer p-3 duration-300 sm:flex-row sm:py-3 sm:px-6 hover:bg-[#5e5a90] text-white"
               >
-                <div className="user flex items-center text-center flex-col sm:flex-row sm:text-left text-white">
-                  <div className="avatar-content mb-2 sm:mb-0 sm:mr-2 text-white ">
-                    <img
-                      className="avatar w-12 h-12 sm:w-14 sm:h-14 rounded-full text-white"
-                      src={user.avatar.url}
-                      alt={user.user_name}
-                    />
-                  </div>
-                  <div className="user-body flex flex-col mb-3 sm:mb-0 sm:mr-3">
-                    <a
-                      href="#"
-                      className="title font-medium no-underline text-white text-lg"
-                    >
-                      {user.user_name}
-                    </a>
-                    <div className="skills flex flex-col">
-                      <span className="subtitle text-md text-purple-500">
-                        {user.Email}
-                      </span>
-                      <span className="subtitle text-slate-400 text-sm">
-                        {time(user.createdAt)}
-                      </span>
+                <Link to={`/profile/${user._id}`}>
+                  <div className="user flex items-center text-center flex-col sm:flex-row sm:text-left text-white">
+                    <div className="avatar-content mb-2 sm:mb-0 sm:mr-2 text-white ">
+                      <img
+                        className="avatar w-12 h-12 sm:w-14 sm:h-14 rounded-full text-white"
+                        src={user.avatar.url}
+                        alt={user.user_name}
+                      />
+                    </div>
+                    <div className="user-body flex flex-col mb-3 sm:mb-0 sm:mr-3">
+                      <a
+                        href="#"
+                        className="title font-medium no-underline text-white text-lg"
+                      >
+                        {user.user_name}
+                      </a>
+                      <div className="skills flex flex-col">
+                        <span className="subtitle text-md text-purple-500">
+                          {user.Email}
+                        </span>
+                        <span className="subtitle text-slate-400 text-sm">
+                          {time(user.createdAt)}
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
+
                 <div className="user-option mx-auto sm:ml-auto sm:mr-0">
-                  <button
-                    onClick={() => navigate(`/profile/${user._id}`)}
-                    className="btn inline-block select-none no-underline align-middle cursor-pointer whitespace-nowrap px-2 py-2 rounded-lg text-sm font-medium leading-5 tracking-tight text-white text-center border-0 bg-[#6911e7] hover:bg-[#590acb] duration-300 "
-                  >
+                  <button className="btn inline-block select-none no-underline align-middle cursor-pointer whitespace-nowrap px-2 py-2 rounded-lg text-sm font-medium leading-5 tracking-tight text-white text-center border-0 bg-[#6911e7] hover:bg-[#590acb] duration-300 ">
                     View Profile
                   </button>
                 </div>
