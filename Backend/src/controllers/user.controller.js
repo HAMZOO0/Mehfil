@@ -378,6 +378,11 @@ const getAllUser = asyncHandler(async (req, res) => {
     {
       $limit: limit,
     },
+    {
+      $sort: {
+        createdAt: -1, // Sort by createdAt in descending order (-1 means newest first)
+      },
+    },
   ]);
 
   if (!user) {
