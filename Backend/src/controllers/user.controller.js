@@ -31,11 +31,9 @@ const register_user = asyncHandler(async (req, res) => {
   } = req.body;
   const avatar = req.file?.path;
   //   const avatar_local_path = req.files?.avatar?.[0]?.path;
-
   if (!user_name || !Full_name || !Email || !password || !avatar) {
     throw new API_Error_handler(400, "All feilds are required ");
   }
-
   const user_check = await User.find({ user_name, Email });
   if (!user_check) {
     throw new API_Error_handler(409, "User already exist change Name or Email");
@@ -46,7 +44,6 @@ const register_user = asyncHandler(async (req, res) => {
   }
   console.log("cloudinary_avatar.fileId", cloudinary_avatar.public_id);
   console.log("cloudinary_avatar.url", cloudinary_avatar.url);
-
   const user = await User.create({
     user_name,
     Full_name,
@@ -54,7 +51,6 @@ const register_user = asyncHandler(async (req, res) => {
     password,
     bio,
     links,
-
     avatar: {
       field_id: cloudinary_avatar.public_id,
       url: cloudinary_avatar.url,
@@ -91,18 +87,25 @@ const register_user = asyncHandler(async (req, res) => {
 const login_user = asyncHandler(async (req, res) => {
   const { Email, password } = req.body;
 
+
+    
+        
+          
+    
+
+        
+        Expand All
+    
+    @@ -95,12 +107,13 @@ const login_user = asyncHandler(async (req, res) => {
+  
   if (!Email || !password) {
     throw new API_Error_handler(404, "Email and Password required");
   }
-
   const user = await User.findOne({ Email });
-
   if (!user) {
     throw new API_Error_handler(404, "Invalid Email - User not found");
   }
-
   const passowrd_check = await user.is_password_currect(password);
-
   if (!passowrd_check) {
     throw new API_Error_handler(401, "Re-check your password");
   }
@@ -117,6 +120,17 @@ const login_user = asyncHandler(async (req, res) => {
   };
 
   return res
+
+    
+        
+          
+    
+
+        
+        Expand All
+    
+    @@ -112,7 +125,6 @@ const login_user = asyncHandler(async (req, res) => {
+  
     .status(200)
     .cookie("access_token", access_token, cookieOptions)
     .cookie("refresh_token", refresh_token, cookieOptions)
@@ -128,9 +142,19 @@ const login_user = asyncHandler(async (req, res) => {
 const logout_user = asyncHandler(async (req, res) => {
   // TODO
   // 1: remove refresh token
+
+    
+          
+            
+    
+
+          
+          Expand Down
+    
+    
+  
   // 2: remove access token
   // 3: send res
-
   const user = await User.findByIdAndUpdate(
     req.user?._id,
     {
@@ -138,39 +162,30 @@ const logout_user = asyncHandler(async (req, res) => {
     },
     { new: true } // Return the updated document after the update.
   );
-
   return res
     .status(200)
     .clearCookie("access_token")
     .clearCookie("refresh_token")
     .json(new API_Responce(200, null, "User logout successfully"));
-
   return res.status(200).json(new API_Responce(200, "Logout successfully"));
 });
-
 const refresh_Access_token = asyncHandler(async (req, res) => {
   const token =
     req.cookies?.refresh_token ||
     req.header("Authorization")?.replace("Bearer ", "");
-
   if (!token) {
     throw new API_Error_handler(400, "invalid requst ");
   }
-
   const user = await User.find({ refresh_token: token });
-
   if (!user) {
     throw new API_Error_handler(404, "User not found ");
   }
-
   const { refresh_token, access_token } =
     await genrate_access_and_refresh_token(user._id);
-
   const option = {
     httpOnly: true,
     secure: true,
   };
-
   return res
     .status(200)
     .cookie("access_token", access_token, option)
@@ -186,30 +201,22 @@ const refresh_Access_token = asyncHandler(async (req, res) => {
       )
     );
 });
-
 const change_password = asyncHandler(async (req, res) => {
   const { oldpassword, password } = req.body;
-
   if (!password || !oldpassword) {
     throw new API_Error_handler(400, "Old and New password required");
   }
-
   const user = await User.findById(req.user?._id);
-
   const password_verification = user.is_password_currect(oldpassword);
   if (!password_verification) {
     throw new API_Error_handler(400, "Old not currect");
   }
-
   user.password = password;
-
   await user.save({ validateBeforeSave: false });
-
   return res
     .status(200)
     .json(new API_Responce(200, {}, "Password changed successfully "));
 });
-
 const get_current_user = asyncHandler(async (req, res, next) => {
   return res
     .status(200)
@@ -217,87 +224,67 @@ const get_current_user = asyncHandler(async (req, res, next) => {
       new API_Responce(200, req.user, "Current user feteched successfully")
     );
 });
-
 const update_account_details = asyncHandler(async (req, res) => {
   console.log("Request Body:", req.body); // Add this line
-
   const { user_name, Email, links, bio } = req.body;
-
   if (!user_name && !Email && !links && !bio) {
     throw new API_Error_handler(400, "nothing to update");
   }
-
   const user = await User.findById(req.user?._id).select(
     "-password -refresh_token"
   );
-
   if (user_name) {
     user.user_name = user_name;
   }
-
   if (Email) {
     user.Email = Email;
   }
-
   if (links) {
     user.links = links;
   }
-
   if (bio) {
     user.bio = bio;
   }
-
   await user.save({ validateBeforeSave: false });
-
   return res
     .status(200)
     .json(new API_Responce(200, user, "Account details updated successfully"));
 });
-
 const update_avatar = asyncHandler(async (req, res) => {
   // TODO
   // 1: upload image - > req.body
   // 2:remove old url and avatart from cloud
   // 3: update image url
   // 3: send res
-
   const avatar = req.file?.path;
   if (!avatar) {
     throw new API_Error_handler(400, "Avatar is missing");
   }
-
   // fetch user
   const user = await User.findById(req.user._id);
   if (!user) {
     throw new API_Error_handler(404, "user is missing");
   }
-
   // fetching fieldid to delete avatar
   const avatar_to_delete = user.avatar?.field_id;
-
   if (!avatar_to_delete) {
     throw new API_Error_handler(500, "Avatar feild id is missing");
   }
-
   // here we delete old one from cloudinary
   await cloudinary_file_delete(avatar_to_delete);
-
   // here we upload new to cloudinary
   const new_avatar = await cloudinary_file_upload(avatar);
   if (!new_avatar) {
     throw new API_Error_handler(500, "Error while uploading new avatar");
   }
-
   // Update the avatar field in the user document
   user.avatar = {
     field_id: new_avatar.public_id,
     url: new_avatar.url,
   };
   await user.save({ validateBeforeSave: false });
-
   return res.status(200).json(new API_Responce(200, user, "Avatar updated"));
 });
-
 const user_profile = asyncHandler(async (req, res) => {
   const { user_name } = req.params;
   const id = new mongoose.Types.ObjectId(user_name);
@@ -305,21 +292,17 @@ const user_profile = asyncHandler(async (req, res) => {
   //   return res.status(400).json({ message: "Invalid user_name format" });
   // }
   // const normalizedUserName = user_name.toLowerCase().trim();
-
   // Query the user by normalized user_name
   // const user = await User.findOne({ user_name: normalizedUserName });
-
   // if (!user) {
   //   return res.status(404).json({ message: "User not found" });
   // }
-
   const userData = await User.aggregate([
     {
       $match: {
         _id: id,
       },
     },
-
     {
       // to gety user  followers
       $lookup: {
@@ -368,29 +351,20 @@ const user_profile = asyncHandler(async (req, res) => {
       },
     },
   ]);
-
   return res.status(200).json(new API_Responce(200, userData, "user profile"));
 });
-
 const getAllUser = asyncHandler(async (req, res) => {
   const limit = 100;
   const user = await User.aggregate([
     {
       $limit: limit,
     },
-    {
-      $sort: {
-        createdAt: -1, // Sort by createdAt in descending order (-1 means newest first)
-      },
-    },
   ]);
-
   if (!user) {
     res.status(200).json(new API_Responce(200, null, "No user find "));
   }
   res.status(200).json(new API_Responce(200, user, "No user find "));
 });
-
 export {
   register_user,
   login_user,
