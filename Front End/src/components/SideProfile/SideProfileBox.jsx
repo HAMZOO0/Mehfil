@@ -8,7 +8,7 @@ import { Toaster } from "react-hot-toast";
 const SideProfileView = () => {
   const navigate = useNavigate();
   const { user } = useStore();
-  let id = user?.data?._id || "";
+  let id = user?._id || "";
 
   const { userId } = useParams();
   if (userId) {
