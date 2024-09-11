@@ -41,7 +41,7 @@ const SideProfileView = () => {
         setUser_name(userData?.user_name || "");
         setIsFollow(userData?.isFollow);
 
-        if (id === user?.data?._id || userId === undefined) {
+        if (id === user?._id || userId === undefined) {
           setuser_profile_check(false);
         } else {
           setuser_profile_check(true);
