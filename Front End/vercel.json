@@ -2,4 +2,9 @@
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
   ]
+ "routes": [
+    {
+      "src": "/favicon.png",
+      "dest": "/public/favicon.png"
+    }
 }
