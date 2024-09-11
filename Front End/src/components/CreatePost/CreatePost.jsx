@@ -9,7 +9,7 @@ function CreatePostBox() {
   const [postContent, setPostContent] = useState("");
   const [loading, setLoading] = useState(false);
   const { user } = useStore();
-  const avatar = user?.data?.avatar?.url || "";
+  const avatar = user?.avatar?.url || "";
 
   const fileInputRef = useRef(null);
 
