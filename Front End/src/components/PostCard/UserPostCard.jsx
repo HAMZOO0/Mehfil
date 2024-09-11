@@ -73,7 +73,7 @@ export default function UserPostCard({ post }) {
   }, []);
 
   return (
-    <div className="w-full  max-w-3xl mx-auto bg-gray-700 rounded-lg p-4 text-white shadow-lg">
+    <div className="w-screen max-w-3xl mx-auto bg-gray-700 rounded-lg p-4 text-white shadow-lg">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
           <img
