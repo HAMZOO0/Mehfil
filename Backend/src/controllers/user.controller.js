@@ -61,21 +61,33 @@ const register_user = asyncHandler(async (req, res) => {
     },
   });
 
+  // genrete token here
+  const { refresh_token, access_token } =
+    await genrate_access_and_refresh_token(user._id);
+
   const created_user = await User.findById(user._id).select(
     "-password -refresh_token "
   );
-
   if (!created_user) {
     throw new API_Error_handler(
       500,
-      "Something is went wrong while creating user obejct "
+      "Something is went wrong while creating user object "
     );
   }
+  const cookieOptions = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // Set to true only in production
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+  };
+
   return res
     .status(200)
+    .cookie("access_token", access_token, cookieOptions)
+    .cookie("refresh_token", refresh_token, cookieOptions)
     .json(new API_Responce(200, created_user, "User registered Successfully"));
 });
 
+//* ---------------------------------
 const login_user = asyncHandler(async (req, res) => {
   const { Email, password } = req.body;
 
@@ -95,12 +107,13 @@ const login_user = asyncHandler(async (req, res) => {
     throw new API_Error_handler(401, "Re-check your password");
   }
 
-  const { refresh_token, access_token } = await genrate_access_and_refresh_token(user._id);
+  const { refresh_token, access_token } =
+    await genrate_access_and_refresh_token(user._id);
 
   const cookieOptions = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production', // Set to true only in production
-    sameSite: process.env.NODE_ENV === 'production' ? "None" : "Lax",
+    secure: process.env.NODE_ENV === "production", // Set to true only in production
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
   };
 
   return res
@@ -111,7 +124,6 @@ const login_user = asyncHandler(async (req, res) => {
       new API_Responce(200, { logged_in_user: user }, "User login successfully")
     );
 });
-
 
 const logout_user = asyncHandler(async (req, res) => {
   // TODO
