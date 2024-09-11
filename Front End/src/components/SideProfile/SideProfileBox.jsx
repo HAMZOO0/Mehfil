@@ -14,9 +14,7 @@ const SideProfileView = () => {
   if (userId) {
     id = userId;
   }
-  console.log("userId -->", userId);
-  console.log("id -->", id);
-  console.log("id -->", id);
+
 
   const [user_profile_check, setuser_profile_check] = useState(false);
   const [IsFollow, setIsFollow] = useState(false);
