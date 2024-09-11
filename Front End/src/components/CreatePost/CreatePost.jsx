@@ -9,7 +9,7 @@ function CreatePostBox() {
   const [postContent, setPostContent] = useState("");
   const [loading, setLoading] = useState(false);
   const { user } = useStore();
-  const avatar = user?.avatar?.url || "";
+  const avatar = user?.data?.avatar?.url || "";
 
   const fileInputRef = useRef(null);
 
@@ -33,7 +33,6 @@ function CreatePostBox() {
 
     try {
       const response = await uploadPost(formData);
-      console.log(response);
       toast.success("Post created successfully");
     } catch (error) {
       toast.error("Failed to create post");
