@@ -375,13 +375,15 @@ const user_profile = asyncHandler(async (req, res) => {
 const getAllUser = asyncHandler(async (req, res) => {
   const limit = 100;
   const user = await User.aggregate([
-    {
-      $limit: limit,
-    },
+  
     {
       $sort: {
         createdAt: -1, // Sort by createdAt in descending order (-1 means newest first)
       },
+      
+    },
+     {
+      $limit: limit,
     },
   ]);
 
