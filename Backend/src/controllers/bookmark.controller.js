@@ -34,7 +34,7 @@ const toggle_bookmark = asyncHandler(async (req, res) => {
 
     return res
       .status(200)
-      .json(new API_Responce(200, null, "bookmark deleted successfully"));
+      .json(new API_Responce(200, false, "bookmark deleted successfully"));
   }
 
   // if we not find it
@@ -45,7 +45,7 @@ const toggle_bookmark = asyncHandler(async (req, res) => {
   });
   return res
     .status(200)
-    .json(new API_Responce(200, new_bookmark, "bookmark added successfully"));
+    .json(new API_Responce(200, true, "bookmark added successfully"));
 });
 
 const get_all_bookmarks = asyncHandler(async (req, res) => {
