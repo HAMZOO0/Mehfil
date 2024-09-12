@@ -1,6 +1,5 @@
 import { getAllBookmarks } from "../api/bookmark.api.js";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { LoadingSpinner, BookmarkCard } from "../components/index.js";
 
 export default function Bookmark() {
@@ -15,9 +14,10 @@ export default function Bookmark() {
         const response = await getAllBookmarks();
 
         // Destructure the necessary data from the response
-        const data = response.data; // Assuming response is the API response
+        const data = response?.data?.[0]?.post; // Assuming response is the API response
 
         // Update the state with the fetched posts
+
         setPosts(data);
       } catch (err) {
         setError(err.message);
@@ -41,7 +41,7 @@ export default function Bookmark() {
     <div className="bg-gray-800 py-14 pr-14">
       {posts.length > 0 ? (
         posts.map((post) => (
-          <div key={post.slug} className="mb-6">
+          <div key={post._id} className="mb-6">
             <BookmarkCard post={post} /> {/* Pass slug inside post */}
           </div>
         ))
