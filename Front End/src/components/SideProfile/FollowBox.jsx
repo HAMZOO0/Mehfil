@@ -71,7 +71,10 @@ function FollowBox() {
                   </div>
                 </Link>
 
-                <div className="user-option mx-auto sm:ml-auto sm:mr-0">
+                <div
+                  onClick={() => navigate(`/profile/${user._id}`)}
+                  className="user-option mx-auto sm:ml-auto sm:mr-0"
+                >
                   <button className="btn inline-block select-none no-underline align-middle cursor-pointer whitespace-nowrap px-2 py-2 rounded-lg text-sm font-medium leading-5 tracking-tight text-white text-center border-0 bg-[#6911e7] hover:bg-[#590acb] duration-300 ">
                     View Profile
                   </button>
