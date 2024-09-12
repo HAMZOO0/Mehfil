@@ -6,7 +6,7 @@ import Home from "./pages/Home.jsx";
 import Profile from "./pages/Profile.jsx";
 import CreatePost from "./pages/CreatePostPage.jsx";
 import EditProfilePage from "./pages/EditProfilePage.jsx";
-import Bookmark from "./pages/Bookmark.jsx";
+import BookmarkLayout from "./pages/BookmarkLayout.jsx";
 function App() {
   return (
     <Router>
@@ -19,7 +19,7 @@ function App() {
         <Route path="/CreatePost" element={<CreatePost />} />
         <Route path="/profile/:userId" element={<Profile />} />
         <Route path="/profile/edit-profile" element={<EditProfilePage />} />
-        <Route path="/bookmark" element={<Bookmark />} />
+        <Route path="/bookmark" element={<BookmarkLayout />} />
       </Routes>
     </Router>
   );
