@@ -21,7 +21,6 @@ export const addBookmark = async (postId) => {
 export const getAllBookmarks = async () => {
   try {
     const response = await api.get("/bookmark/get-bookmark");
-    console.log("bookmark api res ->", response);
 
     return response.data;
   } catch (error) {
