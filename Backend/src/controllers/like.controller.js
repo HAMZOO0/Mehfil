@@ -74,6 +74,31 @@ const toggle_comment_like = asyncHandler(async (req, res) => {
     .json(new API_Responce(200, liked_coment, "comment Likes ! "));
 });
 
+const Like_check = asyncHandler(async (req, res) => {
+  const { postId } = req.params; // Extracting postId from the URL params
+  const user = req.user._id; // Getting the user's ID from the authenticated request
+
+  const post_id = new mongoose.Types.ObjectId(postId); // Converting postId to an ObjectId
+
+  // Searching for a document where post matches post_id and liked_by matches user
+  const post = await Like.findOne({
+    post: post_id,
+    liked_by: user,
+  });
+
+  console.log(post); // Logging the result to check what the query returns
+
+  // If a post is found (i.e., user has liked the post), return success
+  if (post) {
+    return res.status(200).json(new API_Responce(200, true, "Post Liked ! "));
+  }
+
+  // If no post is found, return a false response indicating post not liked
+  return res
+    .status(200)
+    .json(new API_Responce(200, false, "Post Not Liked ! "));
+});
+
 const get_liked_posts = asyncHandler(async (req, res) => {
   const user = req.user._id;
 
@@ -133,4 +158,5 @@ export {
   toggle_comment_like,
   get_liked_posts,
   get_all_likes,
+  Like_check,
 };
