@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { formatDistanceToNow } from "date-fns"; // For displaying time ago
-import { getAllComments, addComment } from "../../api/comment.js";
 import { get_user } from "../../api/auth.api.js";
 import { useParams } from "react-router-dom";
 
 export default function BookmarkCard({ post }) {
   // Format the createdAt date to "time ago"
-  const timeAgo = formatDistanceToNow(new Date(post.createdAt), {
-    addSuffix: true,
-  });
+  console.log("post --->", post);
+
+  // const timeAgo = formatDistanceToNow(new Date(post.createdAt), {
+  //   addSuffix: true,
+  // });
+
+  const timeAgo = null;
 
   // Fallback image if post_img is not provided
   const Postimg = post?.post_img?.url ? post.post_img.url : null;
@@ -40,7 +42,7 @@ export default function BookmarkCard({ post }) {
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
           <img
-            src={avatar}
+            src={""}
             alt="User Profile"
             className="w-14 h-14 rounded-full mr-4"
           />
