@@ -24,6 +24,9 @@ export default function UserProfileHeader() {
     if (newValue === 1) {
       navigate(`/profile/edit-profile`);
     }
+    if (newValue === 2) {
+      navigate(`/bookmark`);
+    }
   };
 
   // now we make a logic for , if the user is open someone else profile the  then we can't show this header we shoud show the posts
