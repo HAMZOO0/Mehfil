@@ -31,7 +31,7 @@ const toggle_post_like = asyncHandler(async (req, res) => {
     await Like.deleteOne(post_to_like);
     return res
       .status(200)
-      .json(new API_Responce(200, null, "Post Disliked ! "));
+      .json(new API_Responce(200, false, "Post Disliked ! "));
   }
 
   const post_like = await Like.create({
@@ -39,9 +39,7 @@ const toggle_post_like = asyncHandler(async (req, res) => {
     liked_by: user,
   });
 
-  return res
-    .status(200)
-    .json(new API_Responce(200, post_like, "Post Likes ! "));
+  return res.status(200).json(new API_Responce(200, true, "Post Likes ! "));
 });
 
 const toggle_comment_like = asyncHandler(async (req, res) => {
