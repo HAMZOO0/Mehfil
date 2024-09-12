@@ -12,6 +12,7 @@ import Header from "./Header/Header.jsx";
 import CreatePost from "./CreatePost/CreatePost.jsx";
 import UserProfileHeader from "./Header/UserProfileHeader.jsx";
 import EditProfile from "./EditProfile.jsx";
+import BookmarkCard from "./PostCard/Bookmark.jsx";
 export {
   Input,
   Login,
@@ -27,4 +28,5 @@ export {
   UserProfileHeader,
   EditProfile,
   FollowBox,
+  BookmarkCard,
 };
