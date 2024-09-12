@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { formatDistanceToNow } from "date-fns"; // For displaying time ago
 import { getAllComments, addComment } from "../../api/comment.js";
-import { toggle_like, all_likes } from "../../api/like.api.js";
-import { useParams } from "react-router-dom";
+import { toggle_like, all_likes, like_check } from "../../api/like.api.js";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-
+import { addBookmark } from "../../api/bookmark.api.js";
 export const PostCard = ({ post }) => {
+  const navigate = useNavigate();
   // Format the createdAt date to "time ago"
   const timeAgo = formatDistanceToNow(new Date(post.createdAt), {
     addSuffix: true,
@@ -14,6 +15,7 @@ export const PostCard = ({ post }) => {
   // Fallback image if post_img is not provided
   const Postimg = post?.post_img?.url ? post.post_img.url : null;
 
+  // * handle comments section
   // State to manage comment visibility and comment data
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]); // Store comments data
@@ -27,7 +29,7 @@ export const PostCard = ({ post }) => {
     // Fetch comments when showing comments section
     fetchComments();
     total_likes();
-    handleLike();
+    handleLikeUI();
   }, []); // Only fetch comments when showComments changes to true
   const toggleComments = () => {
     setShowComments(!showComments);
@@ -44,20 +46,49 @@ export const PostCard = ({ post }) => {
     fetchComments();
   };
 
-  // handle like click
+  // * handle like click
   const [TotalLikes, setTotalLikes] = useState(0);
   const [IsLike, setIsLike] = useState(false);
   const handleLike = async () => {
     const userlike = await toggle_like(post._id);
     const hasLiked = userlike.data; // Get whether the user has liked the post or not
 
-    setIsLike(hasLiked); // her eis set false or true or base of is user like the post or not ... main point is  make ui batter if user like the post and  we user reload the page then post has like and color is also ON .
+    setIsLike(hasLiked); // here we set false or true ,  if the user like the post or not ... main point is  make ui batter if user like the post and  we user reload the page then post has like and color is also turned ON .
+
+    console.log("hasLiked", hasLiked);
+    console.log("IsLike", IsLike);
 
     setTotalLikes((pre) => (IsLike ? pre - 1 : pre + 1));
   };
+
   const total_likes = async () => {
     const allLikes = await all_likes(post._id);
     setTotalLikes(allLikes?.data?.[0]?.totalLikes || 0);
+  };
+
+  //* handle bookmark
+  const [IsBookMark, setIsBookMark] = useState(false);
+  const handleBookmark = async () => {
+    // first we toggle bookmark and check is this post is already bookmarked or not
+    const toggle_Bookmark = await addBookmark(post._id);
+    const hasBookMarked = toggle_Bookmark.data; // Get whether the user has bookmarked the post or not
+    setIsBookMark(hasBookMarked);
+  };
+
+  // * handleLikeUI use to check user like   and bookmark posts and then set these post icon color ON / OFF
+  const handleLikeUI = async () => {
+    // check user likes
+    const userlike = await like_check(post._id);
+    const hasLiked = userlike.data; // Get whether the user has liked the post or not
+    console.log("hasLiked", hasLiked);
+
+    setIsLike(hasLiked); // here we set false or true ,  if the user like the post or not ... main point is  make ui batter if user like the post and  we user reload the page then post has like and color is also turned ON .
+
+    // check user bookmark
+    // const toggle_Bookmark = await addBookmark(post._id);
+    // const hasBookMarked = toggle_Bookmark.data; // Get whether the user has bookmarked the post or not
+
+    // setIsBookMark(hasBookMarked);
   };
 
   return (
@@ -139,21 +170,32 @@ export const PostCard = ({ post }) => {
             <span> {comments.length}</span>
           </button>
 
-          {/* share button */}
-          <button className="flex items-center space-x-2 text-[#a6b5d4]">
+          {/* Bookmae button */}
+          <button
+            onClick={handleBookmark}
+            className={`group relative inline-flex items-center gap-x-1 outline-none  transition ease-in-out  duration-300
+              ${IsBookMark ? `text-purple-500` : ` text-[#e1e1e2]`}
+              `}
+          >
             <svg
-              className="w-6 h-6"
-              fill="currentColor"
               xmlns="http://www.w3.org/2000/svg"
+              fill="none"
               viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              aria-hidden="true"
+              class="h-8 w-5 text-[#e6e5e8] group-hover:text-[#ae7aff] transition-all duration-300 ease-in-out group-focus:text-[#ae7aff]"
             >
               <path
-                fillRule="evenodd"
-                d="M15.75 4.5a3 3 0 11.825 2.066l-8.421 4.679a3.002 3.002 0 010 1.51l8.421 4.679a3 3 0 11-.729 1.31l-8.421-4.678a3 3 0 110-4.132l8.421-4.679a3 3 0 01-.096-.755z"
-                clipRule="evenodd"
-              />
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
+              ></path>
             </svg>
-            <span>Share</span>
+            {/* <!-- Optional Tooltip --> */}
+            <span class="absolute bottom-full mb-2 w-max px-2 py-1 text-xs text-white bg-gray-800 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
+              Bookmark
+            </span>
           </button>
         </div>
       </div>
