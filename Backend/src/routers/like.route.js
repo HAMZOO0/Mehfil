@@ -3,6 +3,7 @@ import {
   toggle_comment_like,
   get_liked_posts,
   get_all_likes,
+  Like_check,
 } from "../controllers/like.controller.js";
 
 import { Router } from "express";
@@ -18,5 +19,6 @@ router
 router.route("/toggle-post-like/:postId").post(verify_jwt, toggle_post_like);
 router.route("/post-like").get(verify_jwt, get_liked_posts);
 router.route("/all-likes/:postid").get(verify_jwt, get_all_likes);
+router.route("/like-check/:postId").get(verify_jwt, Like_check);
 
 export default router;
