@@ -27,6 +27,7 @@ export const PostCard = ({ post }) => {
     // Fetch comments when showing comments section
     fetchComments();
     total_likes();
+    handleLike();
   }, []); // Only fetch comments when showComments changes to true
   const toggleComments = () => {
     setShowComments(!showComments);
@@ -48,8 +49,10 @@ export const PostCard = ({ post }) => {
   const [IsLike, setIsLike] = useState(false);
   const handleLike = async () => {
     const userlike = await toggle_like(post._id);
+    const hasLiked = userlike.data; // Get whether the user has liked the post or not
 
-    setIsLike((pre) => !pre);
+    setIsLike(hasLiked); // her eis set false or true or base of is user like the post or not ... main point is  make ui batter if user like the post and  we user reload the page then post has like and color is also ON .
+
     setTotalLikes((pre) => (IsLike ? pre - 1 : pre + 1));
   };
   const total_likes = async () => {
