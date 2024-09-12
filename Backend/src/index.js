@@ -1,16 +1,19 @@
 import dotenv from "dotenv";
 import { app } from "./app.js";
 import { dataBase_connection } from "./database/connection.js";
-dotenv.config({ path: "./env" });
+
+// Load environment variables from Vercel
+dotenv.config();
 
 dataBase_connection()
   .then(() => {
-    app.listen(process.env.PORT || 3000, () => {
-      console.log(
-        `✔ Application is working on  http://localhost:${process.env.PORT} `
-      );
+    // Listen on the port provided by Vercel or default to 3000 for local development
+    const port = process.env.PORT || 3000;
+    app.listen(port, () => {
+      console.log(`✔ Application is working on http://localhost:${port}`);
     });
   })
   .catch((error) => {
-    console.log("Database Connection Fail", error);
+    console.error("Database Connection Failed", error);
+    process.exit(1); // Exit the process with failure code
   });
