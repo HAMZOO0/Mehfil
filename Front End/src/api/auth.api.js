@@ -38,7 +38,7 @@ api.interceptors.response.use(
         // Call the refresh token API
         const response = await refreshAccessToken();
         const newToken = response.token;
-
+console.log("token" , newToken) // ------------------------------------
         // Save the new token in localStorage
         localStorage.setItem("authToken", newToken);
 
