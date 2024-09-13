@@ -42,7 +42,7 @@ export default function Bookmark() {
     <div className="bg-gray-800 py-14 pr-14">
       {posts.length > 0 ? (
         posts.map((post) => (
-          <div key={post._id} className="mb-6">
+          <div key={post.post[0]._id} className="mb-6">
             <BookmarkCard post={post} /> {/* Pass slug inside post */}
           </div>
         ))
