@@ -11,7 +11,6 @@ export const addBookmark = async (postId) => {
   try {
     const response = await api.post(`/bookmark/toggle-bookmark/${postId}`);
     toast.success(response.data?.message || "Bookmark added successfully");
-    console.log("bookamrk respoence -->" ,response );
 
     return response.data;
   } catch (error) {
