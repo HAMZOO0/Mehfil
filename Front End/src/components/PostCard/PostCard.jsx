@@ -55,9 +55,7 @@ export const PostCard = ({ post }) => {
 
     setIsLike(hasLiked); // here we set false or true ,  if the user like the post or not ... main point is  make ui batter if user like the post and  we user reload the page then post has like and color is also turned ON .
 
-    console.log("hasLiked", hasLiked);
-    console.log("IsLike", IsLike);
-
+    
     setTotalLikes((pre) => (IsLike ? pre - 1 : pre + 1));
   };
 
