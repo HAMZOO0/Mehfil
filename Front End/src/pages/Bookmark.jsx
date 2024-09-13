@@ -12,6 +12,7 @@ export default function Bookmark() {
       try {
         // Fetch posts for the specific user
         const response = await getAllBookmarks();
+console.log("bookmark.jsx repsence -->",response);
 
         // Destructure the necessary data from the response
         const { data } = response; // Assuming response is the API response
