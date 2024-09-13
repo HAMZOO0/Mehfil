@@ -13,7 +13,6 @@ export default function Bookmark() {
         // Fetch posts for the specific user
         const response = await getAllBookmarks();
 
-        
         // Destructure the necessary data from the response
         const { data } = response; // Assuming response is the API response
 
