@@ -152,6 +152,7 @@ const refresh_Access_token = asyncHandler(async (req, res) => {
   const token =
     req.cookies?.refresh_token ||
     req.header("Authorization")?.replace("Bearer ", "");
+  console.log("token", token); //--------------------------------------------------------------
 
   if (!token) {
     throw new API_Error_handler(400, "invalid requst ");
