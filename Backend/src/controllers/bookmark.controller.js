@@ -57,6 +57,14 @@ const get_all_bookmarks = asyncHandler(async (req, res) => {
         owner: user,
       },
     },
+    {
+      $lookup: {
+        from: "posts",
+        localField: "post",
+        foreignField: "_id",
+        as: "post",
+      },
+    },
   ]);
 
   if (!bookmark_list) {
