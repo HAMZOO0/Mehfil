@@ -14,11 +14,12 @@ export default function Bookmark() {
         const response = await getAllBookmarks();
 
         // Destructure the necessary data from the response
-        const data = response?.data?.[0]?.post; // Assuming response is the API response
+        const { data } = response; // Assuming response is the API response
 
+        const posts = Array.isArray(data) ? data : [];
         // Update the state with the fetched posts
 
-        setPosts(data);
+        setPosts(posts);
       } catch (err) {
         setError(err.message);
       } finally {

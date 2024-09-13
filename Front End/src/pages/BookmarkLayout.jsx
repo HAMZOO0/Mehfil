@@ -4,6 +4,7 @@ import {
   Layout,
   SideProfileView,
   FollowBox,
+  UserProfileHeader,
 } from "../components/index.js";
 import { useStore } from "../Store/store.js";
 import { useEffect } from "react";
@@ -25,11 +26,8 @@ export default function BookmarkLayout() {
   }
 
   return (
-    <Layout
-      header={<Header />}
-      sidebar={<SideProfileView />}
-      followbox={<FollowBox />}
-    >
+    <Layout header={<Header />}>
+      <UserProfileHeader />
       <Bookmark />
     </Layout>
   );
