@@ -1,32 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { get_user } from "../../api/auth.api.js";
 import { useParams } from "react-router-dom";
-
+import { formatDistanceToNow } from "date-fns";
 export default function BookmarkCard({ post }) {
   // Format the createdAt date to "time ago"
-  console.log("post --->", post);
 
-  // const timeAgo = formatDistanceToNow(new Date(post.createdAt), {
-  //   addSuffix: true,
-  // });
-
-  const timeAgo = null;
+  const timeAgo = formatDistanceToNow(new Date(post?.post?.[0]?.createdAt), {
+    addSuffix: true,
+  });
 
   // Fallback image if post_img is not provided
-  const Postimg = post?.post_img?.url ? post.post_img.url : null;
+  const Postimg = post?.post?.[0]?.post_img?.url
+    ? post.post[0].post_img.url
+    : null;
 
   // here i am handle user data
-  const { userId } = useParams();
-  const [avatar, setAvatar] = useState({});
   const [user_name, setUser_name] = useState("");
+  const [avatar, setAvatar] = useState("");
 
   useEffect(() => {
     const get_user_data = async () => {
       try {
-        const current_user = await get_user(userId);
+        const current_user = await get_user(post?.post?.[0]?.owner);
 
         const userData = current_user.data[0];
-        console.log("followersCount", userData);
 
         setAvatar(userData?.avatar?.url || "/path/to/default-avatar.png"); // Add fallback avatar
         setUser_name(userData?.user_name || "");
@@ -42,7 +39,7 @@ export default function BookmarkCard({ post }) {
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center">
           <img
-            src={""}
+            src={avatar}
             alt="User Profile"
             className="w-14 h-14 rounded-full mr-4"
           />
@@ -57,8 +54,10 @@ export default function BookmarkCard({ post }) {
       <div className="mb-4">
         {/* Post Content */}
         <div>
-          <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
-          <p className="text-lg text-gray-300 mb-4">{post.description}</p>
+          <h2 className="text-2xl font-bold mb-2">{post?.post?.[0]?.title}</h2>
+          <p className="text-lg text-gray-300 mb-4">
+            {post?.post?.[0]?.description}
+          </p>
           {Postimg && (
             <div className="overflow-hidden rounded-lg mb-4">
               <img
