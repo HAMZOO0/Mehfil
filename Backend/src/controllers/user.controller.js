@@ -157,7 +157,7 @@ const refresh_Access_token = asyncHandler(async (req, res) => {
     throw new API_Error_handler(400, "invalid requst ");
   }
 
-  const user = await User.find({ refresh_token: token });
+  const user = await User.findOne({ refresh_token: token });
 
   if (!user) {
     throw new API_Error_handler(404, "User not found ");
