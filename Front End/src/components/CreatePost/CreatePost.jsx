@@ -3,7 +3,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { uploadPost } from "../../api/post.api";
 import { useStore } from "../../Store/store.js";
 import { Loader } from "../index.js";
-import { useNavigate } from "react-router-dom";
+
 function CreatePostBox() {
   const [selectedFile, setSelectedFile] = useState(null);
   const [postContent, setPostContent] = useState("");
@@ -12,7 +12,6 @@ function CreatePostBox() {
   const avatar = user?.avatar?.url || "";
 
   const fileInputRef = useRef(null);
-  // const navigate = useNavigate();
 
   const handleIconClick = () => {
     fileInputRef.current?.click();
@@ -27,26 +26,31 @@ function CreatePostBox() {
   };
 
   const handlePostClick = async () => {
+    if (!postContent && !selectedFile) {
+      toast.error("Please add content or an image to create a post.");
+      return;
+    }
+
     setLoading(true);
     const formData = new FormData();
     formData.append("title", postContent);
     formData.append("post_img", selectedFile);
 
     try {
-      const response = await uploadPost(formData);
+      await uploadPost(formData);
       toast.success("Post created successfully");
+      // Update the posts without reloading the page (can add logic here)
     } catch (error) {
       toast.error("Failed to create post");
     } finally {
       setSelectedFile(null);
       setPostContent("");
-      window.location.reload();
       setLoading(false);
     }
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto bg-gray-900 rounded-lg p-4 mt-4 ml-0 text-white shadow-lg">
+    <div className="w-full max-w-3xl mx-auto bg-gray-900 rounded-lg p-4 mt-4 text-white shadow-lg">
       <div className="flex items-center mb-4">
         <img
           className="aspect-square h-10 w-10 shrink-0 rounded-full object-cover"
@@ -58,14 +62,14 @@ function CreatePostBox() {
           value={postContent}
           onChange={(e) => setPostContent(e.target.value)}
           placeholder="Create Post here"
-          className="w-full bg-transparent p-2 text-white outline-none placeholder:text-gray-500 md:p-4 text-2xl"
+          className="w-full bg-transparent p-2 text-white outline-none placeholder:text-gray-500 text-lg md:text-2xl"
         />
       </div>
 
-      <div className="flex gap-x-1 sm:gap-x-2">
+      <div className="flex gap-x-2">
         <button
           onClick={handleIconClick}
-          className="flex shrink-0 items-center justify-center p-1"
+          className="flex shrink-0 items-center justify-center p-1 md:p-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +95,7 @@ function CreatePostBox() {
         />
         <button
           onClick={handlePostClick}
-          className="flex shrink-0 items-center justify-center bg-[#ae7aff] p-1"
+          className="flex shrink-0 items-center justify-center bg-[#ae7aff] p-1 md:p-2"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
