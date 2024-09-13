@@ -6,7 +6,7 @@ import { formatDistanceToNow } from "date-fns";
 export default function BookmarkCard({ post }) {
   // Check if the createdAt date exists and is valid
 
-
+console.log("post --->" , post)
   const createdAt = post?.createdAt ? new Date(post.createdAt) : null;
 
   // Format the createdAt date to "time ago" if valid
