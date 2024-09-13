@@ -61,7 +61,6 @@ export default function UserPostCard({ post }) {
         const current_user = await get_user(userId);
 
         const userData = current_user.data[0];
-        console.log("followersCount", userData);
 
         setAvatar(userData?.avatar?.url || "/path/to/default-avatar.png"); // Add fallback avatar
         setUser_name(userData?.user_name || "");
