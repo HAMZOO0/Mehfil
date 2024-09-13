@@ -5,17 +5,19 @@ import { formatDistanceToNow } from "date-fns";
 
 export default function BookmarkCard({ post }) {
   // Check if the createdAt date exists and is valid
-
-console.log("post --->" , post)
-  const createdAt = post?.createdAt ? new Date(post.createdAt) : null;
+  const createdAt = post?.post?.[0]?.createdAt
+    ? new Date(post.post[0].createdAt)
+    : null;
 
   // Format the createdAt date to "time ago" if valid
-  const timeAgo = createdAt && !isNaN(createdAt.getTime())
-    ? formatDistanceToNow(createdAt, { addSuffix: true })
-    : "Unknown time";
+  const timeAgo =
+    createdAt && !isNaN(createdAt.getTime())
+      ? formatDistanceToNow(createdAt, { addSuffix: true })
+      : "Unknown time";
 
   // Fallback image if post_img is not provided
-  const Postimg = post?.post_img?.url || "/path/to/default-image.png";
+  const Postimg =
+    post?.post?.[0]?.post_img?.url || "/path/to/default-image.png";
 
   // Handle user data
   const [user_name, setUser_name] = useState("Unknown User");
@@ -24,7 +26,7 @@ console.log("post --->" , post)
   useEffect(() => {
     const get_user_data = async () => {
       try {
-        const current_user = await get_user(post?.owner);
+        const current_user = await get_user(post?.post?.[0]?.owner);
 
         // Make sure we have valid user data before setting state
         if (current_user?.data?.[0]) {
@@ -59,9 +61,11 @@ console.log("post --->" , post)
       <div className="mb-4">
         {/* Post Content */}
         <div>
-          <h2 className="text-2xl font-bold mb-2">{post?.title || "Untitled Post"}</h2>
+          <h2 className="text-2xl font-bold mb-2">
+            {post?.post?.[0]?.title || "Untitled Post"}
+          </h2>
           <p className="text-lg text-gray-300 mb-4">
-            {post?.description || "No description available"}
+            {post?.post?.[0]?.description || "No description available"}
           </p>
           {Postimg && (
             <div className="overflow-hidden rounded-lg mb-4">
