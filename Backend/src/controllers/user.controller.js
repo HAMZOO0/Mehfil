@@ -166,15 +166,16 @@ const refresh_Access_token = asyncHandler(async (req, res) => {
   const { refresh_token, access_token } =
     await genrate_access_and_refresh_token(user._id);
 
-  const option = {
+  const cookieOptions = {
     httpOnly: true,
-    secure: true,
+    secure: process.env.NODE_ENV === "production", // Set to true only in production
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
   };
 
   return res
     .status(200)
-    .cookie("access_token", access_token, option)
-    .cookie("refresh_token", refresh_token, option)
+    .cookie("access_token", access_token, cookieOptions)
+    .cookie("refresh_token", refresh_token, cookieOptions)
     .json(
       new API_Responce(
         200,
