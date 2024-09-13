@@ -2,8 +2,6 @@ import {
   LoadingSpinner,
   Header,
   Layout,
-  SideProfileView,
-  FollowBox,
   UserProfileHeader,
 } from "../components/index.js";
 import { useStore } from "../Store/store.js";
