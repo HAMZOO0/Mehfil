@@ -20,8 +20,13 @@ function Layout({ children, sidebar, header, followbox }) {
         {header} {/* Render the header content here */}
       </header>
 
+      {/* Sidebar Section - Move to top on mobile */}
+      <aside className="lg:hidden fixed top-0 left-0 w-full bg-gray-800 p-4 z-40">
+        {sidebar} {/* Render the sidebar content here */}
+      </aside>
+
       {/* Main Layout */}
-      <div className="flex flex-1 flex-col lg:flex-row">
+      <div className="flex flex-1 flex-col lg:flex-row pt-16 lg:pt-0">
         {/* Sidebar Section - Hide on smaller screens */}
         <aside className="hidden lg:block w-full lg:w-1/4 bg-gray-800 p-4">
           {sidebar} {/* Render the sidebar content here */}
@@ -31,13 +36,8 @@ function Layout({ children, sidebar, header, followbox }) {
         <main className="w-full lg:w-1/2 p-8 flex flex-col justify-center items-center overflow-y-auto">
           {children} {/* Render the main content here */}
         </main>
-        
-        {/* FollowBox Section - Show on mobile devices */}
-        <aside className="lg:hidden fixed top-0 left-0 w-full bg-gray-800 p-4 z-40">
-          {followbox} {/* Render the FollowBox content here */}
-        </aside>
 
-        {/* FollowBox Section - Hide on mobile devices */}
+        {/* FollowBox Section - Hide on smaller screens */}
         <aside className="hidden lg:block w-full lg:w-1/4 bg-gray-800 p-4">
           {followbox} {/* Render the FollowBox content here */}
         </aside>
