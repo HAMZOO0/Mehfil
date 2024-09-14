@@ -75,9 +75,9 @@ const register_user = asyncHandler(async (req, res) => {
     );
   }
   const cookieOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // Set to true only in production
-    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+    secure: true, // Ensures the cookie is sent over HTTPS
+    sameSite: "None", // Allows the cookie to be sent with cross-site requests
   };
 
   return res
@@ -111,9 +111,9 @@ const login_user = asyncHandler(async (req, res) => {
     await genrate_access_and_refresh_token(user._id);
 
   const cookieOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // Set to true only in production
-    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+    secure: true, // Ensures the cookie is sent over HTTPS
+    sameSite: "None", // Allows the cookie to be sent with cross-site requests
   };
 
   return res
@@ -152,14 +152,13 @@ const refresh_Access_token = asyncHandler(async (req, res) => {
   const token =
     req.cookies?.refresh_token ||
     req.header("Authorization")?.replace("Bearer ", "");
-  console.log("token", token); //--------------------------------------------------------------
 
   if (!token) {
     throw new API_Error_handler(400, "invalid requst ");
   }
 
   const user = await User.findOne({ refresh_token: token });
-  console.log("user", user); //--------------------------------------------------------------
+  console.log("user", user);
 
   if (!user) {
     throw new API_Error_handler(404, "User not found ");
@@ -169,9 +168,9 @@ const refresh_Access_token = asyncHandler(async (req, res) => {
     await genrate_access_and_refresh_token(user._id);
 
   const cookieOptions = {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production", // Set to true only in production
-    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+    secure: true, // Ensures the cookie is sent over HTTPS
+    sameSite: "None", // Allows the cookie to be sent with cross-site requests
   };
 
   return res
@@ -378,15 +377,13 @@ const user_profile = asyncHandler(async (req, res) => {
 const getAllUser = asyncHandler(async (req, res) => {
   const limit = 100;
   const user = await User.aggregate([
-  
+    {
+      $limit: limit,
+    },
     {
       $sort: {
         createdAt: -1, // Sort by createdAt in descending order (-1 means newest first)
       },
-      
-    },
-     {
-      $limit: limit,
     },
   ]);
 
