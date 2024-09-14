@@ -30,7 +30,19 @@ export const uploadPost = async (data) => {
 };
 export const userPosts = async (userid) => {
   try {
-    const response = await api.get(`/posts/user-posts/${userid}`);
+    const response = await api.get(`posts/user-posts/${userid}`);
+
+    return response.data;
+  } catch (error) {
+    console.error("Error:", error);
+    toast.error(error?.response?.data?.error || "Failed to fetched post");
+    throw error;
+  }
+};
+export const postDelete = async (postid) => {
+  try {
+    const response = await api.delete(`/posts/delete-post/${postid}`);
+    console.log("response", response);
 
     return response.data;
   } catch (error) {
