@@ -27,3 +27,4 @@ const verify_jwt = asyncHandler(async (req, res, next) => {
     throw new API_Error_handler(401, error?.message || "Invalid access token");
   }
 });
+export { verify_jwt };
