@@ -155,7 +155,28 @@ const userPosts = asyncHandler(async (req, res) => {
   if (!userid) {
     throw new API_Error_handler(400, "user id is required");
   }
-  const posts = await Post.find({ owner: userId });
+  // const posts = await Post.find({ owner: userId });
+
+  const posts = await Post.aggregate([
+    {
+      $match: { owner: userid },
+    },
+    {
+      $lookup: {
+        from: "users",
+        localField: "owner",
+        foreignField: "_id",
+        as: "user",
+      },
+    },
+    {
+      $project: {
+        "user.password": 0, // Exclude the password field
+        "user.refresh_token": 0, // Exclude the tokens field
+      },
+    },
+  ]);
+
   return res.status(200).json(new API_Responce(200, posts, "user posts"));
 });
 
