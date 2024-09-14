@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { get_user } from "../../api/auth.api.js";
-import { useParams } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 
 export default function BookmarkCard({ post }) {
@@ -42,41 +41,37 @@ export default function BookmarkCard({ post }) {
   }, [post]);
 
   return (
-    <div className="w-screen max-w-3xl mx-auto bg-gray-700 rounded-lg p-4 text-white shadow-lg">
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center">
-          <img
-            src={avatar}
-            alt="User Profile"
-            className="w-14 h-14 rounded-full mr-4"
-          />
-          <div>
-            <span className="block text-xl font-bold">{user_name}</span>
-            <span className="block text-md text-gray-400">{timeAgo}</span>
-          </div>
+    <div className="max-w-sm mx-auto bg-gray-700 rounded-lg p-4 text-white shadow-lg">
+      {/* User Info */}
+      <div className="flex items-center mb-4">
+        <img
+          src={avatar}
+          alt="User Profile"
+          className="w-12 h-12 rounded-full mr-4"
+        />
+        <div>
+          <span className="block text-lg font-bold">{user_name}</span>
+          <span className="block text-sm text-gray-400">{timeAgo}</span>
         </div>
-        <div className="text-2xl">...</div>
       </div>
 
+      {/* Post Content */}
       <div className="mb-4">
-        {/* Post Content */}
-        <div>
-          <h2 className="text-2xl font-bold mb-2">
-            {post?.post?.[0]?.title || "Untitled Post"}
-          </h2>
-          <p className="text-lg text-gray-300 mb-4">
-            {post?.post?.[0]?.description || "No description available"}
-          </p>
-          {Postimg && (
-            <div className="overflow-hidden rounded-lg mb-4">
-              <img
-                src={Postimg}
-                alt="Post"
-                className="w-full h-auto max-h-64 object-cover"
-              />
-            </div>
-          )}
-        </div>
+        <h2 className="text-xl font-bold mb-2">
+          {post?.post?.[0]?.title || "Untitled Post"}
+        </h2>
+        <p className="text-sm text-gray-300 mb-4">
+          {post?.post?.[0]?.description || "No description available"}
+        </p>
+        {Postimg && (
+          <div className="overflow-hidden rounded-lg mb-4">
+            <img
+              src={Postimg}
+              alt="Post"
+              className="w-full h-auto object-cover"
+            />
+          </div>
+        )}
       </div>
 
       {/* Post Actions */}
