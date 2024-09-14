@@ -13,7 +13,7 @@ api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("authToken"); // Get the stored token
     if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`; // Attach token to headers
+      config.headers["Authorization"] = `Bearer ${token}`; // Attach token to headers
     }
     return config;
   },
@@ -38,12 +38,12 @@ api.interceptors.response.use(
         // Call the refresh token API
         const response = await refreshAccessToken();
         const newToken = response.token;
-console.log("token" , newToken) // ------------------------------------
+        console.log("token", newToken); // ------------------------------------
         // Save the new token in localStorage
         localStorage.setItem("authToken", newToken);
 
         // Update the original request with the new token
-        originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+        originalRequest.headers["Authorization"] = `Bearer ${newToken}`;
 
         // Retry the original request
         return api(originalRequest);
