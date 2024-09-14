@@ -34,8 +34,8 @@ export default function Signup() {
 
       const response = await registerUser(formData);
       toast.success("Registration successful!");
-      console.log(response);
-      setUser(response);
+      setUser(response.data);
+
       navigate("/");
     } catch (error) {
       toast.error(error?.response?.formData?.error || "An error occurred");
