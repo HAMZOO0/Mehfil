@@ -49,7 +49,7 @@ export default function Bookmark() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {posts.map((post) => (
               <div
-                key={post.post[0]._id}
+                key={post?.post[0]?._id}
                 className="bg-gray-700 p-4 rounded-lg border border-gray-600 shadow-md hover:shadow-xl transition-shadow duration-300 flex flex-col"
               >
                 <BookmarkCard post={post} /> {/* Pass slug inside post */}
