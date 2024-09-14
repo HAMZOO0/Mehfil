@@ -253,8 +253,8 @@ const delete_post = asyncHandler(async (req, res) => {
   }
 
   // we also need to delete the video or img we have with post
-  const video_to_delete = post.video?.field_id;
-  const post_img_to_delete = post.post_img?.field_id;
+  const video_to_delete = post?.video?.field_id || null;
+  const post_img_to_delete = post?.post_img?.field_id || null;
 
   // if we found post
   if (video_to_delete) {
