@@ -22,8 +22,8 @@ function Layout({ children, sidebar, header, followbox }) {
 
       {/* Main Layout */}
       <div className="flex flex-1 flex-col lg:flex-row">
-        {/* Sidebar Section - Show on mobile and hide on larger screens */}
-        <aside className="block lg:hidden w-full bg-gray-800 p-4">
+        {/* Sidebar Section - Show on all screens */}
+        <aside className="w-full lg:w-1/4 bg-gray-800 p-4 lg:block lg:sticky lg:top-0 lg:h-screen">
           {sidebar} {/* Render the sidebar content here */}
         </aside>
 
@@ -32,8 +32,8 @@ function Layout({ children, sidebar, header, followbox }) {
           {children} {/* Render the main content here */}
         </main>
 
-        {/* FollowBox Section - Show on mobile and hide on larger screens */}
-        <aside className="block lg:hidden w-full bg-gray-800 p-4">
+        {/* FollowBox Section - Show on all screens */}
+        <aside className="w-full lg:w-1/4 bg-gray-800 p-4 lg:hidden">
           {followbox} {/* Render the FollowBox content here */}
         </aside>
       </div>
@@ -43,7 +43,6 @@ function Layout({ children, sidebar, header, followbox }) {
         <div className="grid h-full max-w-lg grid-cols-5 mx-auto">
           <button
             onClick={() => navigate("/")}
-            data-tooltip-target="tooltip-home"
             type="button"
             className="inline-flex flex-col items-center justify-center px-5 rounded-s-full hover:bg-gray-50 dark:hover:bg-gray-800 group"
           >
