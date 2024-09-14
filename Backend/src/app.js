@@ -1,13 +1,13 @@
 import express from "express";
 import cookieparser from "cookie-parser";
-import cors from "cors"; // Correct import
+import cors from "cors";
 
 const app = express();
 
-// CORS middleware should be first
+// CORS middleware configuration
 app.use(
   cors({
-    origin: '*', // Allow requests from any origin
+    origin: 'https://mehfil-social-media.vercel.app', // Replace with your frontend URL
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true, // Allow credentials (cookies, authorization headers)
   })
