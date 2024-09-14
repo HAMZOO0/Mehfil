@@ -28,7 +28,7 @@ export const all_likes = async (postid) => {
 };
 export const like_check = async (postid) => {
   try {
-    const response = await api.get(`likes//like-check/${postid}`);
+    const response = await api.get(`likes/like-check/${postid}`);
     return response.data;
   } catch (error) {
     console.error("Error:", error);
