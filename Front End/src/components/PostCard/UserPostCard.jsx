@@ -3,8 +3,20 @@ import { formatDistanceToNow } from "date-fns"; // For displaying time ago
 import { getAllComments, addComment } from "../../api/comment.js";
 import { toggle_like, all_likes, like_check } from "../../api/like.api.js";
 import { Link } from "react-router-dom";
+import { postDelete } from "../../api/post.api.js";
+import { useStore } from "../../Store/store.js";
+
 export const UserPostCard = ({ post }) => {
-  console.log("post", post);
+  const { user } = useStore();
+  let id = user?._id || "";
+  const [isowner, setIsowner] = useState(false);
+
+  useEffect(() => {
+    // Check if the logged-in user is the owner of the post
+    if (post?.owner === user?._id) {
+      setIsowner(true);
+    }
+  }, [post, user]);
 
   // Format the createdAt date to "time ago"
   const timeAgo = formatDistanceToNow(new Date(post.createdAt), {
@@ -54,9 +66,6 @@ export const UserPostCard = ({ post }) => {
 
     setIsLike(hasLiked); // here we set false or true ,  if the user like the post or not ... main point is  make ui batter if user like the post and  we user reload the page then post has like and color is also turned ON .
 
-    console.log("hasLiked", hasLiked);
-    console.log("IsLike", IsLike);
-
     setTotalLikes((pre) => (IsLike ? pre - 1 : pre + 1));
   };
 
@@ -70,15 +79,30 @@ export const UserPostCard = ({ post }) => {
     // check user likes
     const userlike = await like_check(post._id);
     const hasLiked = userlike.data; // Get whether the user has liked the post or not
-    console.log("hasLiked", hasLiked);
 
     setIsLike(hasLiked); // here we set false or true ,  if the user like the post or not ... main point is  make ui batter if user like the post and  we user reload the page then post has like and color is also turned ON .
 
-    // check user bookmark
-    // const toggle_Bookmark = await addBookmark(post._id);
-    // const hasBookMarked = toggle_Bookmark.data; // Get whether the user has bookmarked the post or not
+    // logic for post menu button
+  };
 
-    // setIsBookMark(hasBookMarked);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  // Function to handle edit action
+  const handleEdit = () => {
+    console.log("Edit clicked");
+    setIsMenuOpen(false); // Close menu after action
+  };
+
+  // Function to handle delete action
+  const handleDelete = async () => {
+    console.log("Delete clicked");
+    await postDelete(post._id);
+    window.location.reload();
+    setIsMenuOpen(false); // Close menu after action
   };
 
   return (
@@ -100,7 +124,32 @@ export const UserPostCard = ({ post }) => {
             <span className="block text-md text-gray-400">{timeAgo}</span>
           </div>
         </div>
-        <div className="text-2xl">...</div>
+
+        {/* menu button */}
+        <div className="relative">
+          {/* Button that triggers the menu */}
+          <button onClick={toggleMenu}>
+            <div className="text-2xl">...</div>
+          </button>
+
+          {/* Conditional rendering of the menu */}
+          {isMenuOpen && isowner && (
+            <div className="absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-lg">
+              <button
+                onClick={handleEdit}
+                className="block px-4 py-2 w-full text-left text-gray-700 hover:bg-gray-200"
+              >
+                Edit
+              </button>
+              <button
+                onClick={handleDelete}
+                className="block px-4 py-2 w-full text-left text-gray-700 hover:bg-gray-200"
+              >
+                Delete
+              </button>
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="mb-4">
