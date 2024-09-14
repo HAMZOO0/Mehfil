@@ -6,17 +6,17 @@ import { Input, Loader } from "./index.js";
 import toast, { Toaster } from "react-hot-toast";
 import { useStore } from "../Store/store.js";
 import { Link } from "react-router-dom";
-import Banner from "./Banner.jsx"; // Import the Banner component
+import Banner from "./Banner.jsx";
+
 export default function Signup() {
   const navigate = useNavigate();
   const { setUser } = useStore();
-
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const [Loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (data) => {
     try {
@@ -46,130 +46,122 @@ export default function Signup() {
   };
 
   return (
-    <div className="h-full overflow-y-auto bg-[#121212] text-white">
+    <div className="h-full overflow-y-auto bg-gray-800 text-white flex flex-col">
       <Banner />
-      <div className="flex items-center justify-center h-full">
-        <div className="w-full max-w-lg p-8 bg-[#1e1e1e] rounded-lg shadow-lg">
+      <div className="py-24 flex flex-1 items-center justify-center  sm:p-6 lg:p-8">
+        <div className="w-full max-w-lg p-6 bg-gray-900 rounded-lg shadow-lg">
           <div className="mb-6 text-center">
-            <div className="mb-6 text-center">
-              {/* Logo with name "Mehfil" */}
-              <div className="flex flex-col items-center">
-                <div className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 drop-shadow-lg">
-                  Mehfil
-                </div>
-              </div>
+            {/* Logo with name "Mehfil" */}
+            <div className="text-5xl sm:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 drop-shadow-lg">
+              Mehfil
             </div>
           </div>
-          <div className="mb-6 text-center text-2xl font-semibold uppercase py-4">
+          <div className="mb-6 text-center text-xl sm:text-2xl font-semibold uppercase py-4">
             Register
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            {/* <!-- Username --> */}
-
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            {/* Username */}
             <Input
               id="user_name"
               name="user_name"
               type="text"
               label="Username*"
               placeholder="Enter your username"
-              className="mb-4 w-full rounded-lg border border-gray-600 bg-black px-3 py-2 text-white placeholder-gray-400"
+              className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
               {...register("user_name", { required: "Username is required" })}
             />
             {errors.user_name && (
-              <p className="text-red-600">{errors.user_name.message}</p>
+              <p className="text-red-400 text-sm">{errors.user_name.message}</p>
             )}
-            {/* <!-- Full Name --> */}
-
+            {/* Full Name */}
             <Input
               id="Full_name"
               name="Full_name"
               type="text"
               label="Full Name*"
               placeholder="Enter your full name"
+              className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
               {...register("Full_name", { required: "Full name is required" })}
-              className="mb-4 w-full rounded-lg border border-gray-600 bg-black px-3 py-2 text-white placeholder-gray-400"
             />
             {errors.Full_name && (
-              <p className="text-red-600">{errors.Full_name.message}</p>
+              <p className="text-red-400 text-sm">{errors.Full_name.message}</p>
             )}
-            {/* <!-- Email --> */}
-
+            {/* Email */}
             <Input
               id="Email"
               name="Email"
               type="email"
               label="Email*"
-              {...register("Email", { required: "Email is required" })}
               placeholder="Enter your email"
-              className="mb-4 w-full rounded-lg border border-gray-600 bg-black px-3 py-2 text-white placeholder-gray-400"
+              className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
+              {...register("Email", { required: "Email is required" })}
             />
             {errors.Email && (
-              <p className="text-red-600">{errors.Email.message}</p>
+              <p className="text-red-400 text-sm">{errors.Email.message}</p>
             )}
-            {/* <!-- Password --> */}
-
+            {/* Password */}
             <Input
               id="password"
               name="password"
               type="password"
               label="Password*"
               placeholder="Enter your password"
+              className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
               {...register("password", { required: "Password is required" })}
-              className="mb-4 w-full rounded-lg border border-gray-600 bg-black px-3 py-2 text-white placeholder-gray-400"
             />
-
             {errors.password && (
-              <p className="text-red-600">{errors.password.message}</p>
+              <p className="text-red-400 text-sm">{errors.password.message}</p>
             )}
-
-            {/* bio  */}
+            {/* Bio */}
             <Input
               id="bio"
               name="bio"
-              type="bio"
-              label="bio*"
-              placeholder="Enter your Bio"
+              type="text"
+              label="Bio*"
+              placeholder="Enter your bio"
+              className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
               {...register("bio")}
-              className="mb-4 w-full rounded-lg border border-gray-600 bg-black px-3 py-2 text-white placeholder-gray-400"
             />
-            {/* links  */}
+            {/* Links */}
             <Input
               id="links"
               name="links"
-              type="links"
-              label="links*"
+              type="text"
+              label="Links*"
               placeholder="Enter your links"
+              className="w-full rounded-lg border border-gray-600 bg-gray-800 px-3 py-2 text-white placeholder-gray-400 focus:border-purple-500 focus:ring-1 focus:ring-purple-500"
               {...register("links")}
-              className="mb-4 w-full rounded-lg border border-gray-600 bg-black px-3 py-2 text-white placeholder-gray-400"
             />
-            {/* <!-- Avatar --> */}
-
+            {/* Avatar */}
             <Input
               id="avatar"
               name="avatar"
               label="Avatar"
               type="file"
+              className="mb-4 w-full bg-gray-800 text-white"
               {...register("avatar", { required: "Avatar is required" })}
-              className="mb-4 w-full bg-black"
             />
             {errors.avatar && (
-              <p className="text-red-600">{errors.avatar.message}</p>
+              <p className="text-red-400 text-sm">{errors.avatar.message}</p>
             )}
-            {/* <!-- Submit Button --> */}
+            {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-[#ae7aff] px-4 py-3 text-black rounded-lg hover:bg-[#9d6dff]"
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
             >
               Register
             </button>
-            <div>
-              <p className="text-center py-2 text-md">
-                <Link to="/login"> Already have an account?</Link>
+            <div className="text-center py-2 text-md">
+              <p>
+                Already have an account?{" "}
+                <Link to="/login" className="text-purple-400 hover:underline">
+                  Login
+                </Link>
               </p>
             </div>
-
-            <div className="py-5">{Loading && <Loader />}</div>
+            {/* Loader */}
+            <div className="py-5">{loading && <Loader />}</div>
           </form>
           <Toaster position="top-right" reverseOrder={false} />
         </div>
