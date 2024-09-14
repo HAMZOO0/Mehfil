@@ -75,9 +75,9 @@ const register_user = asyncHandler(async (req, res) => {
     );
   }
   const cookieOptions = {
-    httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-    secure: true, // Ensures the cookie is sent over HTTPS
-    sameSite: "None", // Allows the cookie to be sent with cross-site requests
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // Set to true only in production
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
   };
 
   return res
@@ -111,9 +111,9 @@ const login_user = asyncHandler(async (req, res) => {
     await genrate_access_and_refresh_token(user._id);
 
   const cookieOptions = {
-    httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-    secure: true, // Ensures the cookie is sent over HTTPS
-    sameSite: "None", // Allows the cookie to be sent with cross-site requests
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // Set to true only in production
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
   };
 
   return res
@@ -168,9 +168,9 @@ const refresh_Access_token = asyncHandler(async (req, res) => {
     await genrate_access_and_refresh_token(user._id);
 
   const cookieOptions = {
-    httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
-    secure: true, // Ensures the cookie is sent over HTTPS
-    sameSite: "None", // Allows the cookie to be sent with cross-site requests
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // Set to true only in production
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
   };
 
   return res
