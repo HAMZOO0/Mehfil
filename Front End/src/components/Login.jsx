@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth.api.js";
 import toast, { Toaster } from "react-hot-toast";
 import { useStore } from "../Store/store.js";
+import Banner from "./Banner.jsx"; // Import the Banner component
+
 export default function Login() {
   const { register, handleSubmit } = useForm();
   const [error, setError] = useState(null);
@@ -17,7 +19,6 @@ export default function Login() {
       toast.success("Login successful!");
 
       setUser(response);
-      console.log(response);
 
       navigate("/");
     } catch (error) {
@@ -29,6 +30,7 @@ export default function Login() {
 
   return (
     <div className="h-screen bg-gray-900">
+      <Banner /> {/* Include the Banner component */}
       <div className="flex min-h-[130vh] items-center justify-center bg-gray-900">
         <div className="w-full max-w-md bg-gray-800 p-8 rounded-lg shadow-lg">
           <h1 className="text-3xl font-bold text-white mb-4 text-center">
