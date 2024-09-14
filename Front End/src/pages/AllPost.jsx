@@ -1,4 +1,3 @@
-// src/pages/AllPost.js
 import React, { useEffect, useState } from "react";
 import { getAllPosts } from "../api/post.api.js";
 import { LoadingSpinner, PostCard } from "../components/index.js";
@@ -11,12 +10,9 @@ export default function AllPost() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        // Fetch data from the API
         const response = await getAllPosts();
-        // Destructure the necessary data from the response
         const { data } = response; // Assuming response is the API response
         const posts = Array.isArray(data.Post) ? data.Post : []; // Ensure posts is an array
-        // Update the state with the fetched posts
         setPosts(posts);
       } catch (err) {
         setError(err.message);
@@ -48,7 +44,12 @@ export default function AllPost() {
         {posts.length > 0 ? (
           <div className="space-y-6">
             {posts.map((post) => (
-              <PostCard key={post._id} post={post} />
+              <div
+                key={post._id}
+                className="p-4 sm:p-6 bg-gray-700 rounded-lg shadow-md"
+              >
+                <PostCard post={post} />
+              </div>
             ))}
           </div>
         ) : (
