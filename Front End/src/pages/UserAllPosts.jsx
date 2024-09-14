@@ -32,23 +32,31 @@ export default function AllPost() {
 
   if (loading)
     return (
-      <div>
+      <div className="flex justify-center items-center h-screen bg-gray-800">
         <LoadingSpinner />
       </div>
     );
-  if (error) return <div>Error: {error}</div>;
+  if (error)
+    return <div className="text-white text-center">Error: {error}</div>;
 
   return (
-    <div className="bg-gray-800 py-14 pr-14">
-      {posts.length > 0 ? (
-        posts.map((post) => (
-          <div key={post._id} className="mb-6">
-            <UserPostCard post={post} /> {/* Pass slug inside post */}
-          </div>
-        ))
-      ) : (
-        <p className="text-white text-center">No posts available</p>
-      )}
+    <div className="bg-gray-800 py-8 px-4 md:px-8 lg:px-16">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {posts.length > 0 ? (
+          posts.map((post) => (
+            <div
+              key={post._id}
+              className="bg-gray-700 rounded-lg overflow-hidden shadow-md"
+            >
+              <UserPostCard post={post} /> {/* Pass slug inside post */}
+            </div>
+          ))
+        ) : (
+          <p className="text-white text-center col-span-full">
+            No posts available
+          </p>
+        )}
+      </div>
     </div>
   );
 }
