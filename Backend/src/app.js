@@ -1,12 +1,10 @@
 import express from "express";
 import cookieparser from "cookie-parser";
-import cors from "cors";
+import cors from "cors"; // Correct import
 
 const app = express();
 
 // CORS middleware should be first
-const cors = require('cors');
-
 app.use(
   cors({
     origin: '*', // Allow requests from any origin
@@ -15,11 +13,10 @@ app.use(
   })
 );
 
-
 app.use(express.json({ limit: "16 kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16 kb" }));
-app.use(express.static("public")); // 'Public' folder se files server ko send krnaa
-app.use(cookieparser()); // here we send and resive cookies from client and save in server and perform other operation on cookies
+app.use(express.static("public")); // Serve static files from 'public' folder
+app.use(cookieparser()); // Parse cookies
 
 // Import routers
 import user_router from "./routers/user.route.js";
