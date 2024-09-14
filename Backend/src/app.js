@@ -5,13 +5,8 @@ import cors from "cors";
 const app = express();
 
 // CORS middleware configuration
-app.use(
-  cors({
-    origin: 'https://mehfil-social-media.vercel.app', // Replace with your frontend URL
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true, // Allow credentials (cookies, authorization headers)
-  })
-);
+app.use(cors());  // This allows all domains
+
 
 app.use(express.json({ limit: "16 kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16 kb" }));
