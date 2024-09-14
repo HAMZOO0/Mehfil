@@ -1,5 +1,6 @@
-import { User } from "../models/user.model.js";
 import { Post } from "../models/post.model.js";
+import { Like } from "../models/like.model.js";
+import { Comment } from "../models/comment.model.js";
 // import {  } from "../middleware/authentication.middleware.js";
 import { API_Error_handler } from "../utils/api_error_handler.js";
 import { API_Responce } from "../utils/api_responce.js";
@@ -242,6 +243,12 @@ const delete_post = asyncHandler(async (req, res) => {
   if (post_img_to_delete) {
     await cloudinary_file_delete(post_img_to_delete);
   }
+
+  // delete comments of post
+  await Comment.deleteMany({ post: postID });
+
+  //delete likes of post
+  await Like.deleteMany({ post: postID });
 
   const deleted_post = await Post.deleteOne({ _id: postID });
 
