@@ -45,6 +45,8 @@ function CreatePostBox() {
     } finally {
       setSelectedFile(null);
       setPostContent("");
+            window.location.reload();
+
       setLoading(false);
     }
   };
