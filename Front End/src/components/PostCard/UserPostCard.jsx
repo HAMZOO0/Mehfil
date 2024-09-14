@@ -92,14 +92,10 @@ export const UserPostCard = ({ post }) => {
   };
 
   // Function to handle edit action
-  const handleEdit = () => {
-    console.log("Edit clicked");
-    setIsMenuOpen(false); // Close menu after action
-  };
+
 
   // Function to handle delete action
   const handleDelete = async () => {
-    console.log("Delete clicked");
     await postDelete(post._id);
     window.location.reload();
     setIsMenuOpen(false); // Close menu after action
@@ -135,12 +131,7 @@ export const UserPostCard = ({ post }) => {
           {/* Conditional rendering of the menu */}
           {isMenuOpen && isowner && (
             <div className="absolute right-0 mt-2 w-32 bg-white rounded-lg shadow-lg">
-              <button
-                onClick={handleEdit}
-                className="block px-4 py-2 w-full text-left text-gray-700 hover:bg-gray-200"
-              >
-                Edit
-              </button>
+           
               <button
                 onClick={handleDelete}
                 className="block px-4 py-2 w-full text-left text-gray-700 hover:bg-gray-200"
