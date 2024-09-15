@@ -25,10 +25,10 @@ export default function UserProfileHeader() {
       navigate(`/Sidepage`);
     }
     if (newValue === 2) {
-      navigate(`/profile/edit-profile`);
+      navigate(`/bookmark`);
     }
     if (newValue === 3) {
-      navigate(`/bookmark`);
+      navigate(`/profile/edit-profile`);
     }
   };
 
