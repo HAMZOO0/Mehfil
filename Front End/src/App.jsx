@@ -8,6 +8,7 @@ import CreatePost from "./pages/CreatePostPage.jsx";
 import EditProfilePage from "./pages/EditProfilePage.jsx";
 import BookmarkLayout from "./pages/BookmarkLayout.jsx";
 import FollowPage from "./pages/Follow.jsx";
+import Sidepage from "./pages/SideProfilePage.jsx";
 function App() {
   return (
     <Router>
@@ -22,6 +23,7 @@ function App() {
         <Route path="/profile/edit-profile" element={<EditProfilePage />} />
         <Route path="/bookmark" element={<BookmarkLayout />} />
         <Route path="/follow" element={<FollowPage />} />
+        <Route path="/Sidepage" element={<Sidepage />} />
       </Routes>
     </Router>
   );
