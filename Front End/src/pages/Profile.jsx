@@ -22,7 +22,9 @@ export default function Profile() {
 
   const { userId } = useParams();
 
+  // here i get id from url and set and i will use this in all post user profile header
   useEffect(() => {
+    // Set the userId in the Zustand store when the component mounts
     if (userId) {
       setID(userId);
     }
