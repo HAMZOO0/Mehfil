@@ -38,7 +38,8 @@ api.interceptors.response.use(
         // Call the refresh token API
         const response = await refreshAccessToken();
         const newToken = response.token;
-]        // Save the new token in localStorage
+        console.log("token", newToken); // ------------------------------------
+        // Save the new token in localStorage
         localStorage.setItem("authToken", newToken);
 
         // Update the original request with the new token
@@ -135,6 +136,7 @@ export const refreshAccessToken = async () => {
 // Get User Profile by ID
 export const get_user = async (id) => {
   try {
+    console.log("Fetching data for user ID:", id);
     const response = await api.get(`/users/user-profile/${id}`);
     return response.data;
   } catch (error) {
@@ -164,6 +166,7 @@ export const edit_user = async (formdata) => {
 export const all_users = async () => {
   try {
     const response = await api.get(`/users/get-all-users`);
+    console.log("Response", response);
     return response.data;
   } catch (error) {
     toast.error(
