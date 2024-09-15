@@ -3,6 +3,7 @@ import {
   Header,
   Layout,
   SideProfileView,
+  UserProfileHeader,
 } from "../components/index.js";
 import AllPost from "./AllPost";
 import { useStore } from "../Store/store.js";
@@ -26,6 +27,7 @@ export default function Sidepage() {
 
   return (
     <Layout header={<Header />}>
+      <UserProfileHeader />
       <SideProfileView />
     </Layout>
   );
