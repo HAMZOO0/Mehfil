@@ -9,6 +9,7 @@ import EditProfilePage from "./pages/EditProfilePage.jsx";
 import BookmarkLayout from "./pages/BookmarkLayout.jsx";
 import FollowPage from "./pages/Follow.jsx";
 import Sidepage from "./pages/SideProfilePage.jsx";
+import About_page from "./pages/About.jsx";
 function App() {
   return (
     <Router>
@@ -24,6 +25,7 @@ function App() {
         <Route path="/bookmark" element={<BookmarkLayout />} />
         <Route path="/follow" element={<FollowPage />} />
         <Route path="/Sidepage" element={<Sidepage />} />
+        <Route path="/about" element={<About_page />} />
       </Routes>
     </Router>
   );
