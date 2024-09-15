@@ -1,22 +1,13 @@
+// src/pages/Bookmark.js
 import React, { useEffect, useState } from "react";
 import { getAllBookmarks } from "../api/bookmark.api.js";
 import { LoadingSpinner, BookmarkCard } from "../components/index.js";
 
 export default function Bookmark() {
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -12,13 +13,10 @@ export default function Bookmark() {
-  
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -29,17 +20,6 @@ export default function Bookmark() {
         setPosts(posts);
       } catch (err) {
         setError(err.message);
-
-    
-        
-          
-    
-
-        
-        Expand All
-    
-    @@ -28,27 +26,40 @@ export default function Bookmark() {
-  
       } finally {
         setLoading(false);
       }
